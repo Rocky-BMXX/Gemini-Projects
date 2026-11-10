@@ -1,0 +1,3067 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CHRISTMAS WONDERLAND — A Magical Christmas Experience</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            midnight: {
+              950: '#030712',
+              900: '#060d1f',
+              850: '#09132b',
+              800: '#0c1a38',
+              700: '#152852'
+            },
+            festive: {
+              emerald: '#0c3d25',
+              green: '#125433',
+              lightGreen: '#1e7b4d',
+              gold: '#d4af37',
+              brightGold: '#f7d070',
+              amber: '#ff9e2c',
+              ruby: '#a81c2f',
+              brightRuby: '#d9253c',
+              ice: '#e2f1ff',
+              snow: '#f8fafc'
+            }
+          },
+          fontFamily: {
+            cinzel: ['Cinzel', 'serif'],
+            playfair: ['Playfair Display', 'serif'],
+            outfit: ['Outfit', 'sans-serif'],
+            script: ['Great Vibes', 'cursive']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- External Libraries -->
+  <!-- Three.js for 3D world -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- GSAP for smooth animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <!-- Canvas Confetti for magical explosions -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #060d1f;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #d4af37;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #f7d070;
+    }
+
+    /* Core Visuals */
+    body {
+      background-color: #060d1f;
+      color: #f8fafc;
+      font-family: 'Outfit', sans-serif;
+      overflow-x: hidden;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Glassmorphism Styles */
+    .glass-panel {
+      background: rgba(12, 26, 56, 0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(212, 175, 55, 0.28);
+      box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+    .glass-panel-subtle {
+      background: rgba(9, 19, 43, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card-hover {
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .glass-card-hover:hover {
+      transform: translateY(-6px);
+      border-color: rgba(247, 208, 112, 0.6);
+      box-shadow: 0 20px 45px -10px rgba(212, 175, 55, 0.3), 0 0 25px rgba(212, 175, 55, 0.15);
+    }
+
+    /* Shimmering Gold & Ruby Text */
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #fff7d6 0%, #f7d070 30%, #d4af37 70%, #997316 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .ruby-gradient-text {
+      background: linear-gradient(135deg, #ffc5cc 0%, #ff4d6d 40%, #c9184a 80%, #800f2f 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .aurora-gradient-text {
+      background: linear-gradient(135deg, #bbf7d0 0%, #38bdf8 50%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Glowing Lights String Effect */
+    .lights-string {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      height: 30px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 20;
+      overflow: hidden;
+    }
+    .light-bulb {
+      width: 10px;
+      height: 16px;
+      border-radius: 50% 50% 40% 40%;
+      margin: 0 4px;
+      position: relative;
+      animation: bulbTwinkle 2s infinite alternate ease-in-out;
+    }
+    .light-bulb::before {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: 3px;
+      width: 4px;
+      height: 4px;
+      background: #27272a;
+      border-radius: 1px;
+    }
+    .bulb-red { background: #ff2a4b; box-shadow: 0 0 14px #ff2a4b; animation-delay: 0.1s; }
+    .bulb-gold { background: #ffbe0b; box-shadow: 0 0 14px #ffbe0b; animation-delay: 0.4s; }
+    .bulb-green { background: #06d6a0; box-shadow: 0 0 14px #06d6a0; animation-delay: 0.7s; }
+    .bulb-blue { background: #3a86ff; box-shadow: 0 0 14px #3a86ff; animation-delay: 1.1s; }
+    .bulb-amber { background: #fb5607; box-shadow: 0 0 14px #fb5607; animation-delay: 1.5s; }
+
+    @keyframes bulbTwinkle {
+      0% { opacity: 0.4; transform: scale(0.9); }
+      100% { opacity: 1; transform: scale(1.1); filter: brightness(1.3); }
+    }
+
+    /* Snowy Cap Drifts on Elements */
+    .snow-cap {
+      position: relative;
+    }
+    .snow-cap::before {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: 10%;
+      right: 10%;
+      height: 10px;
+      background: linear-gradient(180deg, #ffffff 0%, rgba(240, 248, 255, 0.8) 100%);
+      border-radius: 10px 10px 4px 4px;
+      box-shadow: 0 2px 8px rgba(255, 255, 255, 0.6);
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* 3D Gift Box Interactive Styles */
+    .gift-stage {
+      perspective: 1000px;
+    }
+    .gift-box {
+      width: 180px;
+      height: 180px;
+      position: relative;
+      transform-style: preserve-3d;
+      transform: rotateX(-18deg) rotateY(25deg);
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+    }
+    .gift-box:hover {
+      transform: rotateX(-12deg) rotateY(35deg) scale(1.05);
+    }
+    .gift-box.shaking {
+      animation: giftRumble 0.5s ease-in-out infinite;
+    }
+    @keyframes giftRumble {
+      0%, 100% { transform: rotateX(-18deg) rotateY(25deg) translate(0, 0); }
+      20% { transform: rotateX(-20deg) rotateY(20deg) translate(-4px, 2px) rotateZ(-3deg); }
+      40% { transform: rotateX(-16deg) rotateY(30deg) translate(4px, -2px) rotateZ(3deg); }
+      60% { transform: rotateX(-19deg) rotateY(22deg) translate(-3px, -2px) rotateZ(-2deg); }
+      80% { transform: rotateX(-17deg) rotateY(28deg) translate(3px, 2px) rotateZ(2deg); }
+    }
+
+    /* Sides of the Gift Box */
+    .gift-face {
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      background: linear-gradient(135deg, #a81c2f 0%, #7d101e 100%);
+      border: 1px solid #c9184a;
+      box-shadow: inset 0 0 25px rgba(0,0,0,0.5);
+    }
+    .gift-face::before { /* Golden ribbon vertical */
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 72px;
+      width: 36px;
+      background: linear-gradient(90deg, #d4af37 0%, #f7d070 50%, #b8860b 100%);
+      box-shadow: 0 0 10px rgba(247, 208, 112, 0.4);
+    }
+    .gift-face::after { /* Golden ribbon horizontal */
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 72px;
+      height: 36px;
+      background: linear-gradient(180deg, #d4af37 0%, #f7d070 50%, #b8860b 100%);
+      box-shadow: 0 0 10px rgba(247, 208, 112, 0.4);
+    }
+
+    .gift-front  { transform: translateZ(90px); }
+    .gift-back   { transform: rotateY(180deg) translateZ(90px); }
+    .gift-right  { transform: rotateY(90deg) translateZ(90px); }
+    .gift-left   { transform: rotateY(-90deg) translateZ(90px); }
+    .gift-bottom { transform: rotateX(-90deg) translateZ(90px); background: #500a13; }
+    
+    .gift-lid {
+      position: absolute;
+      width: 196px;
+      height: 50px;
+      top: -10px;
+      left: -8px;
+      transform-style: preserve-3d;
+      transform: translateZ(0);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .gift-lid-face {
+      position: absolute;
+      background: linear-gradient(135deg, #c9184a 0%, #8b1524 100%);
+      border: 1px solid #ff4d6d;
+    }
+    .lid-top {
+      width: 196px;
+      height: 196px;
+      transform: rotateX(90deg) translateZ(25px);
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.4);
+    }
+    .lid-top::before {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0; left: 80px; width: 36px;
+      background: linear-gradient(90deg, #d4af37 0%, #f7d070 50%, #b8860b 100%);
+    }
+    .lid-top::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; top: 80px; height: 36px;
+      background: linear-gradient(180deg, #d4af37 0%, #f7d070 50%, #b8860b 100%);
+    }
+    .lid-front  { width: 196px; height: 50px; transform: translateZ(98px); }
+    .lid-back   { width: 196px; height: 50px; transform: rotateY(180deg) translateZ(98px); }
+    .lid-right  { width: 196px; height: 50px; transform: rotateY(90deg) translateZ(98px); }
+    .lid-left   { width: 196px; height: 50px; transform: rotateY(-90deg) translateZ(98px); }
+
+    /* The satin bow on top */
+    .gift-bow {
+      position: absolute;
+      top: -30px;
+      left: 70px;
+      width: 56px;
+      height: 56px;
+      transform: rotateX(90deg) translateZ(35px);
+      background: radial-gradient(circle, #ffe699 0%, #d4af37 60%, #997316 100%);
+      border-radius: 50%;
+      box-shadow: 0 0 20px #f7d070;
+    }
+
+    /* When Gift is opened */
+    .gift-box.opened .gift-lid {
+      transform: translateY(-160px) rotateX(45deg) rotateY(-30deg);
+      opacity: 0.15;
+    }
+    .gift-light-beam {
+      position: absolute;
+      top: 0;
+      left: 45px;
+      width: 90px;
+      height: 250px;
+      background: radial-gradient(ellipse at bottom, rgba(255, 235, 150, 0.9) 0%, rgba(255, 215, 0, 0.4) 40%, rgba(255, 215, 0, 0) 80%);
+      transform: translateY(-200px) rotateX(20deg);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+      filter: blur(8px);
+    }
+    .gift-box.opened .gift-light-beam {
+      opacity: 1;
+      animation: lightPulse 2s infinite alternate;
+    }
+    @keyframes lightPulse {
+      0% { transform: translateY(-220px) scale(0.9); opacity: 0.8; }
+      100% { transform: translateY(-240px) scale(1.15); opacity: 1; }
+    }
+
+    /* Custom Floating Cursor (Desktop) */
+    .magic-cursor {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(247, 208, 112, 0.8);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s, background-color 0.2s;
+      box-shadow: 0 0 15px rgba(247, 208, 112, 0.6);
+    }
+    .magic-cursor-dot {
+      width: 6px;
+      height: 6px;
+      background: #ffffff;
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 10000;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 8px #ffffff;
+    }
+
+    /* Starlight mouse particles */
+    .sparkle-particle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9998;
+      width: 8px;
+      height: 8px;
+      background: radial-gradient(circle, #ffffff 10%, #f7d070 80%, transparent 100%);
+      border-radius: 50%;
+      animation: particleFade 0.8s forwards ease-out;
+    }
+    @keyframes particleFade {
+      0% { opacity: 1; transform: scale(1) translate(0, 0); }
+      100% { opacity: 0; transform: scale(0.2) translate(var(--tx, 0), var(--ty, 15px)); }
+    }
+
+    /* Ambient Pulsing Aura */
+    @keyframes auraGlow {
+      0%, 100% { filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4)); }
+      50% { filter: drop-shadow(0 0 30px rgba(247, 208, 112, 0.8)); }
+    }
+    .aura-glow {
+      animation: auraGlow 3s infinite ease-in-out;
+    }
+
+    /* Reduced Motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body class="selection:bg-festive-gold selection:text-midnight-950">
+
+  <!-- Interactive Desktop Cursor -->
+  <div id="magicCursor" class="magic-cursor hidden md:block"></div>
+  <div id="magicCursorDot" class="magic-cursor-dot hidden md:block"></div>
+
+  <!-- Background 2D Falling Snow Canvas -->
+  <canvas id="snowCanvas" class="fixed inset-0 pointer-events-none z-10 w-full h-full"></canvas>
+
+  <!-- Loading Screen Curtain -->
+  <div id="loadingCurtain" class="fixed inset-0 z-50 bg-midnight-950 flex flex-col items-center justify-center transition-opacity duration-1000 text-center px-4">
+    <div class="relative w-28 h-28 mb-6">
+      <div class="absolute inset-0 border-2 border-festive-gold/30 rounded-full animate-ping"></div>
+      <div class="absolute inset-2 border-2 border-festive-gold/60 border-t-transparent rounded-full animate-spin"></div>
+      <div class="absolute inset-0 flex items-center justify-center text-4xl">🎄</div>
+    </div>
+    <h2 class="font-cinzel text-2xl md:text-3xl text-festive-gold tracking-widest uppercase mb-2">Christmas Wonderland</h2>
+    <p class="font-playfair italic text-slate-300 text-sm md:text-base max-w-md mb-6">"May your holidays be filled with magic, wonder, peace, and warmth."</p>
+    <div class="w-64 h-1.5 bg-midnight-800 rounded-full overflow-hidden border border-festive-gold/30">
+      <div id="loadingProgressBar" class="h-full bg-gradient-to-r from-festive-gold via-festive-brightGold to-festive-amber w-0 transition-all duration-300"></div>
+    </div>
+    <span id="loadingPercentText" class="text-xs text-festive-gold/70 mt-2 font-mono">Loading Experience... 0%</span>
+  </div>
+
+  <!-- FLOATING NAVIGATION BAR -->
+  <header class="fixed top-0 left-0 right-0 z-40 px-4 py-3 transition-all duration-300" id="mainHeader">
+    <div class="max-w-7xl mx-auto flex items-center justify-between glass-panel rounded-2xl px-4 py-2.5 shadow-2xl border border-festive-gold/30">
+      
+      <!-- Brand Logo -->
+      <a href="#hero" class="flex items-center gap-2.5 group">
+        <span class="text-2xl transition-transform group-hover:scale-125 duration-300">⭐</span>
+        <div class="flex flex-col">
+          <span class="font-cinzel text-sm sm:text-base font-bold tracking-wider gold-gradient-text uppercase">Christmas Wonderland</span>
+          <span class="text-[10px] text-slate-400 font-sans tracking-widest uppercase -mt-0.5">Magical Experience 2026</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <nav class="hidden lg:flex items-center gap-6 text-sm font-medium">
+        <a href="#hero" class="text-slate-300 hover:text-festive-gold transition-colors">Intro</a>
+        <a href="#world3d" class="text-slate-300 hover:text-festive-gold transition-colors flex items-center gap-1"><span>🌲</span> 3D World</a>
+        <a href="#greeting" class="text-slate-300 hover:text-festive-gold transition-colors flex items-center gap-1"><span>📜</span> Greeting</a>
+        <a href="#cardStudio" class="text-slate-300 hover:text-festive-gold transition-colors flex items-center gap-1"><span>💌</span> Cards</a>
+        <a href="#countdown" class="text-slate-300 hover:text-festive-gold transition-colors flex items-center gap-1"><span>⏳</span> Countdown</a>
+        <a href="#magicGift" class="text-slate-300 hover:text-festive-gold transition-colors flex items-center gap-1"><span>🎁</span> Gift Box</a>
+        <a href="#musicSection" class="text-slate-300 hover:text-festive-gold transition-colors flex items-center gap-1"><span>🎵</span> Music</a>
+        <a href="#memoryWall" class="text-slate-300 hover:text-festive-gold transition-colors flex items-center gap-1"><span>🖼️</span> Memories</a>
+      </nav>
+
+      <!-- Action Utilities -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        
+        <!-- Mini Music Toggle -->
+        <button id="navMusicBtn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-midnight-800/80 hover:bg-festive-gold/20 border border-festive-gold/40 text-festive-gold transition-all text-xs font-medium" title="Toggle Christmas Music">
+          <span id="navMusicIcon">▶</span>
+          <span id="navMusicLabel" class="hidden sm:inline">Music</span>
+          <div id="navVisualizerBars" class="flex items-end gap-0.5 h-3 ml-1">
+            <span class="w-0.5 h-1 bg-festive-gold rounded-full animate-pulse"></span>
+            <span class="w-0.5 h-2 bg-festive-gold rounded-full animate-pulse delay-75"></span>
+            <span class="w-0.5 h-3 bg-festive-gold rounded-full animate-pulse delay-150"></span>
+          </div>
+        </button>
+
+        <!-- Secret Surprise Trigger -->
+        <button id="navSurpriseBtn" class="hidden sm:flex items-center gap-1 px-3 py-1.5 rounded-xl bg-gradient-to-r from-festive-ruby to-festive-brightRuby hover:from-festive-brightRuby hover:to-festive-ruby text-white font-semibold shadow-lg shadow-festive-ruby/40 text-xs transition-transform hover:scale-105 active:scale-95">
+          <span>✨</span>
+          <span>Surprise!</span>
+        </button>
+
+        <!-- Fullscreen Button -->
+        <button id="fullscreenToggleBtn" class="p-2 rounded-xl bg-midnight-800/80 hover:bg-festive-gold/20 border border-festive-gold/30 text-slate-300 hover:text-festive-gold transition-all text-xs" title="Toggle Fullscreen">
+          <span id="fullscreenIcon">⛶</span>
+        </button>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button id="mobileMenuToggleBtn" class="lg:hidden p-2 rounded-xl bg-midnight-800/80 hover:bg-festive-gold/20 border border-festive-gold/30 text-slate-300 transition-all text-sm" aria-label="Open Navigation Menu">
+          ☰
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Drawer Navigation -->
+    <div id="mobileDrawer" class="lg:hidden hidden mt-2 glass-panel rounded-2xl p-4 border border-festive-gold/30 shadow-2xl transition-all">
+      <div class="grid grid-cols-2 gap-2 text-sm font-medium">
+        <a href="#hero" class="mobile-nav-link p-2 rounded-lg bg-midnight-800/60 hover:bg-festive-gold/20 text-slate-200 flex items-center gap-2"><span>⭐</span> Intro</a>
+        <a href="#world3d" class="mobile-nav-link p-2 rounded-lg bg-midnight-800/60 hover:bg-festive-gold/20 text-slate-200 flex items-center gap-2"><span>🌲</span> 3D World</a>
+        <a href="#greeting" class="mobile-nav-link p-2 rounded-lg bg-midnight-800/60 hover:bg-festive-gold/20 text-slate-200 flex items-center gap-2"><span>📜</span> Greeting</a>
+        <a href="#cardStudio" class="mobile-nav-link p-2 rounded-lg bg-midnight-800/60 hover:bg-festive-gold/20 text-slate-200 flex items-center gap-2"><span>💌</span> Cards</a>
+        <a href="#countdown" class="mobile-nav-link p-2 rounded-lg bg-midnight-800/60 hover:bg-festive-gold/20 text-slate-200 flex items-center gap-2"><span>⏳</span> Countdown</a>
+        <a href="#magicGift" class="mobile-nav-link p-2 rounded-lg bg-midnight-800/60 hover:bg-festive-gold/20 text-slate-200 flex items-center gap-2"><span>🎁</span> Gift Box</a>
+        <a href="#musicSection" class="mobile-nav-link p-2 rounded-lg bg-midnight-800/60 hover:bg-festive-gold/20 text-slate-200 flex items-center gap-2"><span>🎵</span> Music</a>
+        <a href="#memoryWall" class="mobile-nav-link p-2 rounded-lg bg-midnight-800/60 hover:bg-festive-gold/20 text-slate-200 flex items-center gap-2"><span>🖼️</span> Memories</a>
+      </div>
+      <button id="mobileSurpriseBtn" class="w-full mt-3 py-2 rounded-xl bg-gradient-to-r from-festive-ruby to-festive-brightRuby text-white font-semibold text-xs flex items-center justify-center gap-1.5">
+        <span>✨</span> Reveal Christmas Surprise
+      </button>
+    </div>
+  </header>
+
+  <!-- 1. CINEMATIC INTRODUCTION (HERO) -->
+  <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-16 px-4">
+    
+    <!-- Atmospheric Ambient Glow Gradients -->
+    <div class="absolute inset-0 bg-radial-gradient from-midnight-800/50 via-midnight-900 to-midnight-950 pointer-events-none"></div>
+    <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-festive-emerald/30 rounded-full blur-[140px] pointer-events-none"></div>
+    <div class="absolute top-1/3 -left-40 w-[500px] h-[500px] bg-festive-ruby/20 rounded-full blur-[130px] pointer-events-none"></div>
+    <div class="absolute bottom-10 -right-40 w-[600px] h-[600px] bg-festive-gold/15 rounded-full blur-[150px] pointer-events-none"></div>
+
+    <!-- Festive Lights String -->
+    <div class="lights-string">
+      <div class="light-bulb bulb-red"></div>
+      <div class="light-bulb bulb-gold"></div>
+      <div class="light-bulb bulb-green"></div>
+      <div class="light-bulb bulb-blue"></div>
+      <div class="light-bulb bulb-amber"></div>
+      <div class="light-bulb bulb-red"></div>
+      <div class="light-bulb bulb-gold"></div>
+      <div class="light-bulb bulb-green"></div>
+      <div class="light-bulb bulb-blue"></div>
+      <div class="light-bulb bulb-amber"></div>
+      <div class="light-bulb bulb-red"></div>
+      <div class="light-bulb bulb-gold"></div>
+    </div>
+
+    <div class="relative z-20 max-w-5xl mx-auto text-center flex flex-col items-center">
+      
+      <!-- Crown Badge -->
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-festive-gold/40 text-festive-gold text-xs sm:text-sm font-semibold tracking-widest uppercase mb-6 shadow-lg shadow-festive-gold/10 aura-glow">
+        <span>✦</span>
+        <span>A Magical Christmas Experience 2026</span>
+        <span>✦</span>
+      </div>
+
+      <!-- Main Cinematic Titles -->
+      <h1 class="font-cinzel text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-none uppercase mb-2">
+        <span class="block text-slate-100 drop-shadow-md">Christmas</span>
+        <span class="block gold-gradient-text drop-shadow-[0_10px_25px_rgba(212,175,55,0.4)]">Wonderland</span>
+      </h1>
+
+      <p class="font-script text-3xl sm:text-4xl md:text-5xl text-festive-brightGold my-2 drop-shadow">
+        Where Holiday Dreams Come True
+      </p>
+
+      <p class="font-outfit text-slate-300 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mt-4 mb-8 leading-relaxed font-light">
+        Step into an enchanted realm of glowing pines, celestial northern lights, festive carols, and heartfelt wonders. A breathtaking digital Christmas journey curated for you, your friends, and your beloved family.
+      </p>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap items-center justify-center gap-4 w-full sm:w-auto">
+        
+        <!-- Primary Enter Experience Button -->
+        <button id="enterExperienceBtn" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-festive-gold via-festive-brightGold to-festive-amber hover:from-festive-brightGold hover:to-festive-gold text-midnight-950 font-cinzel font-bold text-sm sm:text-base tracking-wider uppercase shadow-2xl shadow-festive-gold/40 hover:shadow-festive-gold/70 transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0 flex items-center justify-center gap-3 group">
+          <span class="text-xl transition-transform group-hover:rotate-12 duration-300">🎄</span>
+          <span>Enter The Christmas Experience</span>
+          <span class="text-lg transition-transform group-hover:translate-x-1 duration-300">➔</span>
+        </button>
+
+        <!-- Secondary Quick Actions -->
+        <a href="#cardStudio" class="w-full sm:w-auto px-6 py-4 rounded-2xl glass-panel hover:bg-midnight-800/80 text-slate-100 font-cinzel font-semibold text-xs sm:text-sm tracking-wider uppercase border border-festive-gold/30 hover:border-festive-gold transition-all duration-300 flex items-center justify-center gap-2">
+          <span>💌</span>
+          <span>Create Personal Card</span>
+        </a>
+
+        <a href="#magicGift" class="w-full sm:w-auto px-6 py-4 rounded-2xl glass-panel hover:bg-midnight-800/80 text-slate-100 font-cinzel font-semibold text-xs sm:text-sm tracking-wider uppercase border border-festive-gold/30 hover:border-festive-gold transition-all duration-300 flex items-center justify-center gap-2">
+          <span>🎁</span>
+          <span>Open Mystery Gift</span>
+        </a>
+      </div>
+
+      <!-- Feature Pill Badges -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-12 w-full max-w-3xl">
+        <div class="glass-panel-subtle rounded-xl p-2.5 text-center border border-slate-700/50">
+          <span class="text-lg">🌲</span>
+          <div class="text-xs font-semibold text-slate-200 mt-1">3D World</div>
+          <div class="text-[10px] text-slate-400">Interactive Pine Forest</div>
+        </div>
+        <div class="glass-panel-subtle rounded-xl p-2.5 text-center border border-slate-700/50">
+          <span class="text-lg">🎶</span>
+          <div class="text-xs font-semibold text-slate-200 mt-1">Music Synthesizer</div>
+          <div class="text-[10px] text-slate-400">4 Holiday Carols</div>
+        </div>
+        <div class="glass-panel-subtle rounded-xl p-2.5 text-center border border-slate-700/50">
+          <span class="text-lg">💌</span>
+          <div class="text-xs font-semibold text-slate-200 mt-1">Card Generator</div>
+          <div class="text-[10px] text-slate-400">WhatsApp & Download</div>
+        </div>
+        <div class="glass-panel-subtle rounded-xl p-2.5 text-center border border-slate-700/50">
+          <span class="text-lg">⏳</span>
+          <div class="text-xs font-semibold text-slate-200 mt-1">Live Countdown</div>
+          <div class="text-[10px] text-slate-400">December 25, 2026</div>
+        </div>
+      </div>
+
+      <!-- Down Indicator -->
+      <a href="#world3d" class="mt-12 text-festive-gold/70 hover:text-festive-gold animate-bounce transition-colors" title="Scroll down">
+        <span class="text-2xl">↓</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- 2. INTERACTIVE 3D CHRISTMAS WORLD -->
+  <section id="world3d" class="relative min-h-screen py-16 px-4 bg-gradient-to-b from-midnight-950 via-midnight-900 to-midnight-950">
+    <div class="max-w-7xl mx-auto">
+      
+      <!-- Section Header -->
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-festive-emerald/40 text-festive-lightGreen border border-festive-lightGreen/30 text-xs font-semibold uppercase tracking-wider mb-3">
+          <span>✨</span> Interactive 3D Realm
+        </div>
+        <h2 class="font-cinzel text-3xl sm:text-4xl md:text-5xl font-extrabold gold-gradient-text uppercase">
+          Enchanted Christmas World
+        </h2>
+        <p class="font-outfit text-slate-300 text-sm sm:text-base max-w-xl mx-auto mt-2">
+          Explore the grand illuminated Christmas tree, cozy snow-covered cabins, soaring reindeer sleigh, shimmering northern lights, and falling snow. Drag to orbit, zoom, or choose a viewpoint!
+        </p>
+      </div>
+
+      <!-- 3D Canvas Container -->
+      <div class="relative w-full h-[550px] sm:h-[650px] rounded-3xl overflow-hidden glass-panel border-2 border-festive-gold/40 shadow-2xl">
+        
+        <!-- The actual Three.js Canvas -->
+        <canvas id="threeCanvas" class="w-full h-full cursor-grab active:cursor-grabbing"></canvas>
+
+        <!-- Viewport Controls Overlay (Top Right) -->
+        <div class="absolute top-4 right-4 z-20 flex flex-col gap-2">
+          
+          <!-- Camera Presets -->
+          <div class="glass-panel rounded-2xl p-2 flex flex-col gap-1 border border-festive-gold/30 shadow-lg text-xs">
+            <span class="text-[10px] text-slate-400 font-semibold tracking-wider px-2 uppercase mb-1">Camera Views</span>
+            <button id="camTreeBtn" class="px-2.5 py-1.5 rounded-lg bg-festive-gold/20 hover:bg-festive-gold/40 text-festive-gold text-left font-medium transition-all flex items-center gap-1.5">
+              <span>🌲</span> Tree Focus
+            </button>
+            <button id="camVillageBtn" class="px-2.5 py-1.5 rounded-lg bg-midnight-800/80 hover:bg-festive-gold/20 text-slate-300 text-left font-medium transition-all flex items-center gap-1.5">
+              <span>🏘️</span> Village View
+            </button>
+            <button id="camSleighBtn" class="px-2.5 py-1.5 rounded-lg bg-midnight-800/80 hover:bg-festive-gold/20 text-slate-300 text-left font-medium transition-all flex items-center gap-1.5">
+              <span>🛷</span> Sky & Sleigh
+            </button>
+            <button id="camOrbitToggleBtn" class="px-2.5 py-1.5 rounded-lg bg-midnight-800/80 hover:bg-festive-gold/20 text-slate-300 text-left font-medium transition-all flex items-center gap-1.5">
+              <span id="orbitIcon">🔄</span> Auto-Rotate: ON
+            </button>
+          </div>
+
+          <!-- Mood / Atmosphere Switcher -->
+          <div class="glass-panel rounded-2xl p-2 flex flex-col gap-1 border border-festive-gold/30 shadow-lg text-xs">
+            <span class="text-[10px] text-slate-400 font-semibold tracking-wider px-2 uppercase mb-1">Atmosphere</span>
+            <button id="moodMidnightBtn" class="px-2.5 py-1 rounded-lg bg-festive-gold/20 text-festive-gold text-left font-medium transition-all">
+              🌌 Midnight Frost
+            </button>
+            <button id="moodAuroraBtn" class="px-2.5 py-1 rounded-lg bg-midnight-800/80 hover:bg-festive-gold/20 text-slate-300 text-left font-medium transition-all">
+              💚 Northern Aurora
+            </button>
+            <button id="moodSunsetBtn" class="px-2.5 py-1 rounded-lg bg-midnight-800/80 hover:bg-festive-gold/20 text-slate-300 text-left font-medium transition-all">
+              🌅 Sunset Amber
+            </button>
+          </div>
+
+        </div>
+
+        <!-- 3D Hint Overlay (Bottom Left) -->
+        <div class="absolute bottom-4 left-4 z-20 glass-panel-subtle rounded-xl px-3 py-2 text-xs text-slate-300 border border-slate-700 flex items-center gap-2">
+          <span>🖐️</span>
+          <span>Click & drag to explore · Scroll to zoom</span>
+        </div>
+
+        <!-- Flying Sleigh Radar Status (Bottom Right) -->
+        <div class="absolute bottom-4 right-4 z-20 glass-panel-subtle rounded-xl px-3 py-2 text-xs text-festive-gold border border-festive-gold/30 flex items-center gap-2">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-festive-ruby opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-festive-ruby"></span>
+          </span>
+          <span id="sleighStatusText">Santa's Sleigh in Flight Over Valley</span>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 3. CHRISTMAS GREETING EXPERIENCE -->
+  <section id="greeting" class="relative py-20 px-4 bg-midnight-950 overflow-hidden">
+    
+    <!-- Background holiday aura -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-festive-gold/10 rounded-full blur-[160px] pointer-events-none"></div>
+
+    <div class="relative z-20 max-w-4xl mx-auto text-center">
+      
+      <!-- Decorative Top Ornament Graphic -->
+      <div class="flex items-center justify-center gap-3 mb-6">
+        <div class="h-px w-16 sm:w-24 bg-gradient-to-r from-transparent to-festive-gold"></div>
+        <span class="text-3xl text-festive-gold animate-pulse">👑</span>
+        <div class="h-px w-16 sm:w-24 bg-gradient-to-l from-transparent to-festive-gold"></div>
+      </div>
+
+      <!-- Grand Animated Merry Christmas Greeting -->
+      <h2 class="font-cinzel text-5xl sm:text-7xl md:text-8xl font-black uppercase tracking-tight mb-6">
+        <span class="gold-gradient-text drop-shadow-[0_10px_35px_rgba(212,175,55,0.5)]">Merry Christmas!</span>
+      </h2>
+
+      <!-- Heartfelt Blessing Paragraph -->
+      <div class="glass-panel rounded-3xl p-6 sm:p-10 border-2 border-festive-gold/40 shadow-2xl relative snow-cap">
+        <p class="font-playfair text-xl sm:text-2xl md:text-3xl text-slate-100 italic leading-relaxed font-normal mb-6">
+          "May this Christmas fill your heart with happiness, your home with warmth, and your life with endless blessings. Wishing you and your loved ones a season filled with love, laughter, peace, and unforgettable memories."
+        </p>
+
+        <div class="h-px w-32 bg-festive-gold/40 mx-auto my-6"></div>
+
+        <!-- 4 Core Christmas Pillars -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
+          <div class="p-3 rounded-2xl bg-midnight-900/60 border border-festive-gold/20 text-center">
+            <span class="text-2xl">🕊️</span>
+            <div class="font-cinzel text-sm font-bold text-festive-gold mt-1">Peace</div>
+            <div class="text-[11px] text-slate-400">In every heart</div>
+          </div>
+          <div class="p-3 rounded-2xl bg-midnight-900/60 border border-festive-gold/20 text-center">
+            <span class="text-2xl">❤️</span>
+            <div class="font-cinzel text-sm font-bold text-festive-brightRuby mt-1">Love</div>
+            <div class="text-[11px] text-slate-400">Without measure</div>
+          </div>
+          <div class="p-3 rounded-2xl bg-midnight-900/60 border border-festive-gold/20 text-center">
+            <span class="text-2xl">🌟</span>
+            <div class="font-cinzel text-sm font-bold text-festive-amber mt-1">Joy</div>
+            <div class="text-[11px] text-slate-400">In every moment</div>
+          </div>
+          <div class="p-3 rounded-2xl bg-midnight-900/60 border border-festive-gold/20 text-center">
+            <span class="text-2xl">🕯️</span>
+            <div class="font-cinzel text-sm font-bold text-festive-lightGreen mt-1">Hope</div>
+            <div class="text-[11px] text-slate-400">For the new year</div>
+          </div>
+        </div>
+
+        <!-- Interactive Voice Blessing Trigger -->
+        <div class="mt-8 flex justify-center">
+          <button id="chimeBlessingBtn" class="px-5 py-2.5 rounded-xl bg-midnight-800/90 hover:bg-festive-gold/20 border border-festive-gold/40 text-festive-gold text-xs font-semibold flex items-center gap-2 transition-all hover:scale-105">
+            <span>🔔</span> Play Cathedral Blessing Chime
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 4. PERSONALIZED CHRISTMAS GREETINGS (CARD GENERATOR) -->
+  <section id="cardStudio" class="relative py-20 px-4 bg-gradient-to-b from-midnight-950 via-midnight-900 to-midnight-950">
+    <div class="max-w-6xl mx-auto">
+      
+      <!-- Section Header -->
+      <div class="text-center mb-12">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-festive-ruby/30 text-festive-brightRuby border border-festive-ruby/40 text-xs font-semibold uppercase tracking-wider mb-3">
+          <span>💌</span> Custom Greetings Studio
+        </div>
+        <h2 class="font-cinzel text-3xl sm:text-5xl font-extrabold gold-gradient-text uppercase">
+          Create Your Personalized Christmas Card
+        </h2>
+        <p class="font-outfit text-slate-300 text-sm sm:text-base max-w-xl mx-auto mt-2">
+          Personalize an enchanted greeting card for your loved ones, preview it in real time, and share it instantly via WhatsApp or direct link!
+        </p>
+      </div>
+
+      <!-- Studio Layout: Left Controls, Right Live Card Preview -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Controls Column -->
+        <div class="lg:col-span-5 glass-panel rounded-3xl p-6 sm:p-8 border border-festive-gold/30 shadow-2xl">
+          <h3 class="font-cinzel text-lg font-bold text-festive-gold mb-4 flex items-center gap-2">
+            <span>⚙️</span> Card Customizer
+          </h3>
+
+          <!-- Recipient Name Input -->
+          <div class="mb-4">
+            <label for="cardRecipientInput" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Recipient's Name</label>
+            <input type="text" id="cardRecipientInput" value="Beloved Family & Friends" maxlength="40" class="w-full px-4 py-2.5 rounded-xl bg-midnight-950/80 border border-festive-gold/40 text-white placeholder-slate-500 focus:outline-none focus:border-festive-gold focus:ring-1 focus:ring-festive-gold text-sm transition-all" placeholder="Enter recipient name...">
+          </div>
+
+          <!-- Sender Name Input -->
+          <div class="mb-4">
+            <label for="cardSenderInput" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Sender's Signature</label>
+            <input type="text" id="cardSenderInput" value="With boundless love & joy" maxlength="40" class="w-full px-4 py-2.5 rounded-xl bg-midnight-950/80 border border-festive-gold/40 text-white placeholder-slate-500 focus:outline-none focus:border-festive-gold focus:ring-1 focus:ring-festive-gold text-sm transition-all" placeholder="Enter your name...">
+          </div>
+
+          <!-- Card Style Selector -->
+          <div class="mb-4">
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Card Visual Theme</label>
+            <div class="grid grid-cols-2 gap-2" id="styleSelectorContainer">
+              <button data-style="emerald" class="style-btn px-3 py-2 rounded-xl bg-festive-emerald/70 border-2 border-festive-gold text-festive-brightGold text-xs font-semibold text-left transition-all flex items-center gap-2 shadow-md">
+                <span class="w-3 h-3 rounded-full bg-emerald-500"></span> Royal Emerald
+              </button>
+              <button data-style="ruby" class="style-btn px-3 py-2 rounded-xl bg-midnight-900 border border-slate-700 text-slate-300 text-xs font-semibold text-left transition-all flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-rose-600"></span> Fireside Velvet
+              </button>
+              <button data-style="aurora" class="style-btn px-3 py-2 rounded-xl bg-midnight-900 border border-slate-700 text-slate-300 text-xs font-semibold text-left transition-all flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-cyan-400"></span> Northern Aurora
+              </button>
+              <button data-style="gold" class="style-btn px-3 py-2 rounded-xl bg-midnight-900 border border-slate-700 text-slate-300 text-xs font-semibold text-left transition-all flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-amber-400"></span> Midnight Gold
+              </button>
+            </div>
+          </div>
+
+          <!-- Message Preset Selector -->
+          <div class="mb-6">
+            <label for="cardMessagePreset" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Select Greeting Message</label>
+            <select id="cardMessagePreset" class="w-full px-3 py-2.5 rounded-xl bg-midnight-950/80 border border-festive-gold/40 text-slate-200 text-xs focus:outline-none focus:border-festive-gold mb-2">
+              <option value="0">"Wishing you endless peace, warm memories, and boundless happiness."</option>
+              <option value="1">"May the starlight of Christmas shine brightly upon your home and path."</option>
+              <option value="2">"Grateful for your presence in my life. Wishing you magical holidays!"</option>
+              <option value="3">"May your festive season be filled with laughter, delicious feasts, and pure love."</option>
+              <option value="custom">-- Write Custom Message Below --</option>
+            </select>
+            <textarea id="cardCustomMessage" rows="3" class="w-full px-3 py-2 rounded-xl bg-midnight-950 border border-slate-700 text-slate-200 text-xs focus:outline-none focus:border-festive-gold placeholder-slate-500 transition-all hidden" placeholder="Write your heartfelt Christmas message..."></textarea>
+          </div>
+
+          <!-- Quick Action Buttons -->
+          <div class="flex flex-col gap-2">
+            <button id="copyGreetingTextBtn" class="w-full py-2.5 px-4 rounded-xl bg-midnight-800 hover:bg-festive-gold/20 border border-festive-gold/40 text-festive-gold text-xs font-semibold flex items-center justify-center gap-2 transition-all">
+              <span>📋</span> Copy Message Text
+            </button>
+            <button id="shareWhatsAppBtn" class="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-700/30 transition-all">
+              <span>💬</span> Share on WhatsApp
+            </button>
+            <button id="copyShareLinkBtn" class="w-full py-2.5 px-4 rounded-xl bg-midnight-800 hover:bg-festive-gold/20 border border-slate-600 text-slate-200 text-xs font-semibold flex items-center justify-center gap-2 transition-all">
+              <span>🔗</span> Copy Shareable Card Link
+            </button>
+            <button id="downloadCardBtn" class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-festive-gold to-festive-amber hover:from-festive-brightGold hover:to-festive-gold text-midnight-950 font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-festive-gold/20 transition-all">
+              <span>🖼️</span> Download Card as Image (PNG)
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Live Card Preview Column -->
+        <div class="lg:col-span-7 flex flex-col items-center">
+          
+          <div class="text-xs text-festive-gold/80 font-semibold uppercase tracking-wider mb-3 flex items-center gap-1.5">
+            <span class="animate-pulse">●</span> Live Animated Card Preview
+          </div>
+
+          <!-- THE CHRISTMAS CARD -->
+          <div id="liveCardPreview" class="relative w-full max-w-lg aspect-[4/3] rounded-3xl p-8 sm:p-10 flex flex-col justify-between border-4 border-festive-gold shadow-2xl transition-all duration-500 overflow-hidden bg-gradient-to-br from-[#0c3d25] via-[#082a19] to-[#04160d]">
+            
+            <!-- Ornate Filigree Corner Borders -->
+            <div class="absolute top-2 left-2 text-festive-gold/60 text-xl font-serif pointer-events-none select-none">❧</div>
+            <div class="absolute top-2 right-2 text-festive-gold/60 text-xl font-serif pointer-events-none select-none">☙</div>
+            <div class="absolute bottom-2 left-2 text-festive-gold/60 text-xl font-serif pointer-events-none select-none">❧</div>
+            <div class="absolute bottom-2 right-2 text-festive-gold/60 text-xl font-serif pointer-events-none select-none">☙</div>
+
+            <!-- Card Top Header -->
+            <div class="text-center">
+              <div class="text-2xl sm:text-3xl mb-1">🎄 ✦ ❄️</div>
+              <h4 class="font-cinzel text-xs sm:text-sm font-semibold tracking-widest text-festive-brightGold uppercase">
+                Warmest Holiday Greetings
+              </h4>
+              <div class="h-0.5 w-16 bg-festive-gold/50 mx-auto mt-1"></div>
+            </div>
+
+            <!-- Card Core Body -->
+            <div class="text-center my-auto px-4">
+              <div id="cardPreviewTo" class="font-playfair text-xl sm:text-2xl font-bold text-white mb-2 drop-shadow">
+                Dearest Beloved Family & Friends,
+              </div>
+              <p id="cardPreviewBody" class="font-outfit text-xs sm:text-sm text-slate-200 leading-relaxed italic max-w-md mx-auto">
+                "Wishing you endless peace, warm memories, and boundless happiness."
+              </p>
+            </div>
+
+            <!-- Card Bottom Signature -->
+            <div class="flex items-end justify-between border-t border-festive-gold/30 pt-3">
+              <div>
+                <span class="text-[10px] text-festive-gold/80 block uppercase font-mono tracking-wider">MERRY CHRISTMAS 2026</span>
+                <span class="text-[10px] text-slate-400">Christmas Wonderland</span>
+              </div>
+              
+              <!-- Wax Seal Motif -->
+              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-festive-ruby via-festive-brightRuby to-rose-900 border-2 border-festive-gold flex items-center justify-center text-xs shadow-md">
+                ⭐
+              </div>
+
+              <div class="text-right">
+                <span class="text-[10px] text-slate-400 block">From</span>
+                <span id="cardPreviewFrom" class="font-script text-base sm:text-lg text-festive-brightGold font-bold">
+                  With boundless love & joy
+                </span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Share feedback toast container -->
+          <div id="cardToast" class="mt-4 px-4 py-2 rounded-xl bg-festive-gold text-midnight-950 text-xs font-bold shadow-lg opacity-0 transition-opacity duration-300 pointer-events-none">
+            Greeting copied to clipboard!
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 5. MAGICAL CHRISTMAS COUNTDOWN -->
+  <section id="countdown" class="relative py-20 px-4 bg-midnight-950 overflow-hidden">
+    
+    <!-- Ambient Starlight Glow -->
+    <div class="absolute inset-0 bg-radial-gradient from-midnight-800/40 via-transparent to-midnight-950 pointer-events-none"></div>
+
+    <div class="relative z-20 max-w-5xl mx-auto text-center">
+      
+      <!-- Badge -->
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-festive-gold/20 text-festive-brightGold border border-festive-gold/40 text-xs font-semibold uppercase tracking-wider mb-4">
+        <span>⏳</span> Live Christmas Countdown
+      </div>
+
+      <h2 class="font-cinzel text-3xl sm:text-5xl font-extrabold gold-gradient-text uppercase mb-2">
+        Countdown to Christmas 2026
+      </h2>
+      <p class="font-outfit text-slate-300 text-sm sm:text-base max-w-xl mx-auto mb-10">
+        Counting every magical second until December 25, 2026. Feel the anticipation build as the holiday season approaches!
+      </p>
+
+      <!-- Countdown Flip Tiles Grid -->
+      <div id="countdownGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 max-w-3xl mx-auto">
+        
+        <!-- DAYS -->
+        <div class="glass-panel rounded-3xl p-5 sm:p-6 border-2 border-festive-gold/40 shadow-2xl relative overflow-hidden group hover:border-festive-gold transition-all">
+          <div class="absolute -top-10 -right-10 w-24 h-24 bg-festive-gold/10 rounded-full blur-xl"></div>
+          <span id="daysNum" class="block font-cinzel text-4xl sm:text-6xl font-black gold-gradient-text tracking-tight group-hover:scale-105 transition-transform duration-300">00</span>
+          <span class="block text-xs sm:text-sm font-semibold tracking-widest text-slate-300 uppercase mt-2">Days</span>
+          <div class="h-1 w-8 bg-festive-gold/40 rounded-full mx-auto mt-2"></div>
+        </div>
+
+        <!-- HOURS -->
+        <div class="glass-panel rounded-3xl p-5 sm:p-6 border-2 border-festive-gold/40 shadow-2xl relative overflow-hidden group hover:border-festive-gold transition-all">
+          <div class="absolute -top-10 -right-10 w-24 h-24 bg-festive-ruby/10 rounded-full blur-xl"></div>
+          <span id="hoursNum" class="block font-cinzel text-4xl sm:text-6xl font-black text-slate-100 tracking-tight group-hover:scale-105 transition-transform duration-300">00</span>
+          <span class="block text-xs sm:text-sm font-semibold tracking-widest text-slate-300 uppercase mt-2">Hours</span>
+          <div class="h-1 w-8 bg-festive-ruby/40 rounded-full mx-auto mt-2"></div>
+        </div>
+
+        <!-- MINUTES -->
+        <div class="glass-panel rounded-3xl p-5 sm:p-6 border-2 border-festive-gold/40 shadow-2xl relative overflow-hidden group hover:border-festive-gold transition-all">
+          <div class="absolute -top-10 -right-10 w-24 h-24 bg-festive-emerald/10 rounded-full blur-xl"></div>
+          <span id="minutesNum" class="block font-cinzel text-4xl sm:text-6xl font-black text-slate-100 tracking-tight group-hover:scale-105 transition-transform duration-300">00</span>
+          <span class="block text-xs sm:text-sm font-semibold tracking-widest text-slate-300 uppercase mt-2">Minutes</span>
+          <div class="h-1 w-8 bg-festive-lightGreen/40 rounded-full mx-auto mt-2"></div>
+        </div>
+
+        <!-- SECONDS -->
+        <div class="glass-panel rounded-3xl p-5 sm:p-6 border-2 border-festive-gold/40 shadow-2xl relative overflow-hidden group hover:border-festive-gold transition-all">
+          <div class="absolute -top-10 -right-10 w-24 h-24 bg-festive-amber/10 rounded-full blur-xl"></div>
+          <span id="secondsNum" class="block font-cinzel text-4xl sm:text-6xl font-black text-festive-amber tracking-tight group-hover:scale-105 transition-transform duration-300 animate-pulse">00</span>
+          <span class="block text-xs sm:text-sm font-semibold tracking-widest text-slate-300 uppercase mt-2">Seconds</span>
+          <div class="h-1 w-8 bg-festive-amber/40 rounded-full mx-auto mt-2"></div>
+        </div>
+
+      </div>
+
+      <!-- Celebration Container (Reveals after Christmas) -->
+      <div id="christmasCelebrationBanner" class="hidden glass-panel rounded-3xl p-8 border-2 border-festive-gold max-w-2xl mx-auto shadow-2xl">
+        <span class="text-5xl block mb-2">🎉 🎄 🎅</span>
+        <h3 class="font-cinzel text-3xl sm:text-4xl font-extrabold gold-gradient-text uppercase">Merry Christmas Day!</h3>
+        <p class="font-playfair text-lg text-slate-200 italic mt-2">The joyful season has arrived! Celebrate with music, loved ones, and festive cheer!</p>
+      </div>
+
+      <!-- Festive Milestone Subtext -->
+      <div class="mt-8 text-xs text-slate-400 font-mono">
+        Target: December 25, 2026 · Local Timezone · Season of Goodwill
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 6. INTERACTIVE CHRISTMAS GIFT BOX -->
+  <section id="magicGift" class="relative py-20 px-4 bg-gradient-to-b from-midnight-950 via-midnight-900 to-midnight-950 overflow-hidden">
+    <div class="max-w-4xl mx-auto text-center">
+      
+      <!-- Badge -->
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-festive-ruby/30 text-festive-brightRuby border border-festive-ruby/40 text-xs font-semibold uppercase tracking-wider mb-3">
+        <span>🎁</span> Interactive Surprise
+      </div>
+
+      <h2 class="font-cinzel text-3xl sm:text-5xl font-extrabold gold-gradient-text uppercase mb-2">
+        The Enchanted Christmas Gift
+      </h2>
+      <p class="font-outfit text-slate-300 text-sm sm:text-base max-w-lg mx-auto mb-12">
+        Tap the gift box below to shake it, untie the ribbon, pop the lid, and reveal a heartfelt secret Christmas blessing!
+      </p>
+
+      <!-- 3D Gift Box Interactive Stage -->
+      <div class="gift-stage flex items-center justify-center min-h-[300px] mb-8">
+        
+        <div id="interactiveGiftBox" class="gift-box" title="Click me to open your gift!">
+          
+          <!-- Golden Light Beam -->
+          <div class="gift-light-beam"></div>
+
+          <!-- Sides of the box -->
+          <div class="gift-face gift-front"></div>
+          <div class="gift-face gift-back"></div>
+          <div class="gift-face gift-right"></div>
+          <div class="gift-face gift-left"></div>
+          <div class="gift-face gift-bottom"></div>
+
+          <!-- The Removable Lid -->
+          <div class="gift-lid">
+            <div class="gift-lid-face lid-top"></div>
+            <div class="gift-lid-face lid-front"></div>
+            <div class="gift-lid-face lid-back"></div>
+            <div class="gift-lid-face lid-right"></div>
+            <div class="gift-lid-face lid-left"></div>
+            <div class="gift-bow"></div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Hint text -->
+      <div id="giftTapHint" class="text-xs text-festive-gold/80 font-medium tracking-wider uppercase animate-bounce mb-6">
+        ✦ Tap or Click the Gift Box to Open ✦
+      </div>
+
+      <!-- Revealed Heartfelt Message Card -->
+      <div id="giftMessageReveal" class="hidden glass-panel rounded-3xl p-6 sm:p-8 max-w-xl mx-auto border-2 border-festive-gold shadow-2xl transition-all duration-500">
+        <span class="text-4xl block mb-2">🌟</span>
+        <h3 id="revealedGiftTitle" class="font-cinzel text-xl sm:text-2xl font-bold gold-gradient-text uppercase mb-2">
+          Gift of Christmas Wonder
+        </h3>
+        <p id="revealedGiftMessage" class="font-playfair text-slate-200 text-base sm:text-lg italic leading-relaxed mb-6">
+          "May your days be painted with warm memories, your laughter be abundant, and may every morning bring a new reason to smile. You are truly cherished!"
+        </p>
+
+        <button id="resetGiftBtn" class="px-6 py-2.5 rounded-xl bg-midnight-800 hover:bg-festive-gold/20 border border-festive-gold text-festive-gold text-xs font-semibold tracking-wider uppercase transition-all hover:scale-105">
+          🎁 Wrap Another Gift Surprise
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 7. CHRISTMAS MUSIC EXPERIENCE -->
+  <section id="musicSection" class="relative py-20 px-4 bg-midnight-950">
+    <div class="max-w-4xl mx-auto">
+      
+      <!-- Section Header -->
+      <div class="text-center mb-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-festive-emerald/30 text-festive-lightGreen border border-festive-lightGreen/40 text-xs font-semibold uppercase tracking-wider mb-3">
+          <span>🎵</span> Web Audio Synthesizer
+        </div>
+        <h2 class="font-cinzel text-3xl sm:text-5xl font-extrabold gold-gradient-text uppercase">
+          Festive Holiday Harmony
+        </h2>
+        <p class="font-outfit text-slate-300 text-sm sm:text-base max-w-lg mx-auto mt-2">
+          Enjoy royalty-free classical Christmas carols synthesized via Web Audio API celesta and carillon bells. Switch songs, tweak volume, and watch the live visualizer!
+        </p>
+      </div>
+
+      <!-- Music Player Glass Console -->
+      <div class="glass-panel rounded-3xl p-6 sm:p-8 border-2 border-festive-gold/30 shadow-2xl relative overflow-hidden">
+        
+        <!-- Live Audio Visualizer Canvas -->
+        <div class="w-full h-24 sm:h-32 rounded-2xl bg-midnight-950/80 border border-slate-700/60 p-2 mb-6 flex items-center justify-center relative overflow-hidden">
+          <canvas id="musicVisualizerCanvas" class="w-full h-full"></canvas>
+          <div id="visualizerIdleText" class="absolute inset-0 flex items-center justify-center text-xs text-slate-400 font-mono">
+            Press Play to Synthesize Christmas Carol Chimes
+          </div>
+        </div>
+
+        <!-- Song Metadata & Controls -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-700/60 pb-6 mb-6">
+          
+          <div class="text-center sm:text-left">
+            <span class="text-[11px] text-festive-gold uppercase tracking-wider block font-semibold">Now Playing</span>
+            <h3 id="currentSongTitle" class="font-cinzel text-xl sm:text-2xl font-bold text-white">We Wish You a Merry Christmas</h3>
+            <span class="text-xs text-slate-400">Holiday Celesta & Cathedral Chimes · Tempo 160 BPM</span>
+          </div>
+
+          <!-- Playback Actions -->
+          <div class="flex items-center gap-3">
+            <button id="prevTrackBtn" class="p-3 rounded-full bg-midnight-800 hover:bg-festive-gold/20 border border-slate-600 text-slate-200 transition-all text-sm" title="Previous Track">
+              ⏮
+            </button>
+            <button id="mainPlayPauseBtn" class="w-14 h-14 rounded-full bg-gradient-to-r from-festive-gold to-festive-amber hover:from-festive-brightGold hover:to-festive-gold text-midnight-950 font-bold text-xl flex items-center justify-center shadow-xl shadow-festive-gold/30 transition-transform hover:scale-105 active:scale-95" title="Play / Pause">
+              <span id="mainPlayIcon">▶</span>
+            </button>
+            <button id="nextTrackBtn" class="p-3 rounded-full bg-midnight-800 hover:bg-festive-gold/20 border border-slate-600 text-slate-200 transition-all text-sm" title="Next Track">
+              ⏭
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Track Selector Pills -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6" id="songSelectorGrid">
+          <button data-song="0" class="song-pill px-3 py-2 rounded-xl bg-festive-gold/20 border border-festive-gold text-festive-gold text-xs font-semibold text-center transition-all">
+            🎄 Wish You a Merry
+          </button>
+          <button data-song="1" class="song-pill px-3 py-2 rounded-xl bg-midnight-900/60 border border-slate-700 text-slate-300 text-xs font-semibold text-center hover:bg-festive-gold/10 transition-all">
+            🔔 Jingle Bells
+          </button>
+          <button data-song="2" class="song-pill px-3 py-2 rounded-xl bg-midnight-900/60 border border-slate-700 text-slate-300 text-xs font-semibold text-center hover:bg-festive-gold/10 transition-all">
+            🕊️ Silent Night
+          </button>
+          <button data-song="3" class="song-pill px-3 py-2 rounded-xl bg-midnight-900/60 border border-slate-700 text-slate-300 text-xs font-semibold text-center hover:bg-festive-gold/10 transition-all">
+            🕯️ Deck the Halls
+          </button>
+        </div>
+
+        <!-- Volume and Mute Controls -->
+        <div class="flex items-center justify-between gap-4 text-xs">
+          <div class="flex items-center gap-2">
+            <button id="muteToggleBtn" class="text-slate-300 hover:text-festive-gold transition-colors">
+              <span id="muteIcon">🔊</span>
+            </button>
+            <label for="volumeSlider" class="text-slate-300">Volume</label>
+            <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="0.7" class="w-28 accent-festive-gold cursor-pointer">
+          </div>
+          <div class="text-[11px] text-slate-400">
+            Audio strictly adheres to user-initiated playback.
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 8. CHRISTMAS MEMORY WALL & PHOTO GALLERY -->
+  <section id="memoryWall" class="relative py-20 px-4 bg-gradient-to-b from-midnight-950 via-midnight-900 to-midnight-950">
+    <div class="max-w-6xl mx-auto">
+      
+      <!-- Section Header -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-10">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-festive-gold/20 text-festive-brightGold border border-festive-gold/30 text-xs font-semibold uppercase tracking-wider mb-2">
+            <span>🖼️</span> Cherished Keepsakes
+          </div>
+          <h2 class="font-cinzel text-3xl sm:text-4xl font-extrabold gold-gradient-text uppercase">
+            Christmas Memory Wall
+          </h2>
+          <p class="font-outfit text-slate-300 text-xs sm:text-sm max-w-lg mt-1">
+            Capture, celebrate, and preserve holiday memories. Upload your personal family photos locally or explore the nostalgic holiday moments!
+          </p>
+        </div>
+
+        <!-- Add Memory Button -->
+        <button id="openUploadMemoryModalBtn" class="px-5 py-3 rounded-2xl bg-gradient-to-r from-festive-gold to-festive-amber hover:from-festive-brightGold hover:to-festive-gold text-midnight-950 font-bold text-xs tracking-wider uppercase shadow-lg shadow-festive-gold/20 flex items-center gap-2 transition-all hover:scale-105">
+          <span>📷</span> Add Your Memory
+        </button>
+      </div>
+
+      <!-- Memories Grid -->
+      <div id="memoryGalleryGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <!-- Memory Card 1 -->
+        <div class="memory-card glass-panel rounded-3xl p-4 border border-festive-gold/30 shadow-xl glass-card-hover group cursor-pointer" data-id="1">
+          <div class="w-full aspect-[4/3] rounded-2xl overflow-hidden mb-3 bg-midnight-950 relative">
+            <!-- Custom Festive Scene Vector Graphic -->
+            <svg class="w-full h-full object-cover" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="400" height="300" fill="#0c1a38"/>
+              <circle cx="200" cy="80" r="120" fill="#152852"/>
+              <!-- Pine Tree -->
+              <polygon points="200,40 250,110 150,110" fill="#0c3d25"/>
+              <polygon points="200,90 270,170 130,170" fill="#125433"/>
+              <polygon points="200,150 290,240 110,240" fill="#1e7b4d"/>
+              <rect x="185" y="240" width="30" height="40" fill="#5c3818"/>
+              <!-- Ornaments -->
+              <circle cx="180" cy="90" r="8" fill="#d9253c"/>
+              <circle cx="220" cy="140" r="8" fill="#f7d070"/>
+              <circle cx="170" cy="180" r="9" fill="#06d6a0"/>
+              <circle cx="230" cy="210" r="8" fill="#3a86ff"/>
+              <polygon points="200,25 205,37 218,37 207,45 211,57 200,49 189,57 193,45 182,37 195,37" fill="#ffe699"/>
+            </svg>
+            <div class="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-midnight-900/80 text-[10px] text-festive-gold font-mono">
+              Dec 2026
+            </div>
+          </div>
+          <h4 class="font-cinzel text-base font-bold text-white group-hover:text-festive-gold transition-colors">Decorating the Grand Tree</h4>
+          <p class="font-outfit text-xs text-slate-300 mt-1 line-clamp-2">Placing the golden star topper together with family under the gentle glow of fairy lights.</p>
+        </div>
+
+        <!-- Memory Card 2 -->
+        <div class="memory-card glass-panel rounded-3xl p-4 border border-festive-gold/30 shadow-xl glass-card-hover group cursor-pointer" data-id="2">
+          <div class="w-full aspect-[4/3] rounded-2xl overflow-hidden mb-3 bg-midnight-950 relative">
+            <svg class="w-full h-full object-cover" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="400" height="300" fill="#1a0c10"/>
+              <!-- Fireplace hearth -->
+              <rect x="100" y="100" width="200" height="180" fill="#3d141a" rx="10"/>
+              <rect x="130" y="140" width="140" height="140" fill="#000000" rx="6"/>
+              <!-- Fire flame -->
+              <path d="M170 240 Q 200 160 210 210 Q 230 180 230 240 Z" fill="#ff9e2c"/>
+              <path d="M185 240 Q 200 190 205 220 Q 215 200 215 240 Z" fill="#ffbe0b"/>
+              <!-- Stockings hanging -->
+              <rect x="140" y="115" width="20" height="35" rx="5" fill="#d9253c"/>
+              <rect x="180" y="115" width="20" height="35" rx="5" fill="#125433"/>
+              <rect x="220" y="115" width="20" height="35" rx="5" fill="#f7d070"/>
+            </svg>
+            <div class="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-midnight-900/80 text-[10px] text-festive-gold font-mono">
+              Eve 2026
+            </div>
+          </div>
+          <h4 class="font-cinzel text-base font-bold text-white group-hover:text-festive-gold transition-colors">Fireside Cocoa & Stories</h4>
+          <p class="font-outfit text-xs text-slate-300 mt-1 line-clamp-2">Sipping steaming spiced hot cocoa by the crackling brick hearth while reading festive tales.</p>
+        </div>
+
+        <!-- Memory Card 3 -->
+        <div class="memory-card glass-panel rounded-3xl p-4 border border-festive-gold/30 shadow-xl glass-card-hover group cursor-pointer" data-id="3">
+          <div class="w-full aspect-[4/3] rounded-2xl overflow-hidden mb-3 bg-midnight-950 relative">
+            <svg class="w-full h-full object-cover" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="400" height="300" fill="#08182b"/>
+              <!-- Snow mounds -->
+              <circle cx="200" cy="380" r="220" fill="#e2f1ff"/>
+              <!-- Snowman -->
+              <circle cx="200" cy="210" r="45" fill="#ffffff"/>
+              <circle cx="200" cy="145" r="32" fill="#ffffff"/>
+              <circle cx="200" cy="95" r="22" fill="#ffffff"/>
+              <!-- Eyes & carrot -->
+              <circle cx="193" cy="92" r="3" fill="#1e293b"/>
+              <circle cx="207" cy="92" r="3" fill="#1e293b"/>
+              <polygon points="200,98 220,102 200,105" fill="#fb5607"/>
+              <!-- Scarf -->
+              <rect x="180" y="112" width="40" height="10" rx="3" fill="#d9253c"/>
+              <!-- Hat -->
+              <rect x="182" y="70" width="36" height="10" fill="#1e293b"/>
+              <rect x="188" y="45" width="24" height="25" fill="#1e293b"/>
+            </svg>
+            <div class="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-midnight-900/80 text-[10px] text-festive-gold font-mono">
+              Winter Morning
+            </div>
+          </div>
+          <h4 class="font-cinzel text-base font-bold text-white group-hover:text-festive-gold transition-colors">First Snow in the Valley</h4>
+          <p class="font-outfit text-xs text-slate-300 mt-1 line-clamp-2">Building Frosty in the backyard with a top hat and carrot nose after 10 inches of fresh powder.</p>
+        </div>
+
+        <!-- Memory Card 4 -->
+        <div class="memory-card glass-panel rounded-3xl p-4 border border-festive-gold/30 shadow-xl glass-card-hover group cursor-pointer" data-id="4">
+          <div class="w-full aspect-[4/3] rounded-2xl overflow-hidden mb-3 bg-midnight-950 relative">
+            <svg class="w-full h-full object-cover" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="400" height="300" fill="#241408"/>
+              <!-- Gingerbread House -->
+              <polygon points="200,80 290,160 110,160" fill="#a45a2a"/>
+              <rect x="125" y="160" width="150" height="90" fill="#8d4b20"/>
+              <!-- Icing roof -->
+              <path d="M 105 165 Q 120 180 135 165 Q 150 180 165 165 Q 180 180 195 165 Q 210 180 225 165 Q 240 180 255 165 Q 270 180 285 165" stroke="#ffffff" stroke-width="8" fill="none"/>
+              <!-- Door & Candies -->
+              <rect x="175" y="195" width="35" height="55" rx="8" fill="#d9253c"/>
+              <circle cx="150" cy="200" r="10" fill="#06d6a0"/>
+              <circle cx="235" cy="200" r="10" fill="#ffbe0b"/>
+            </svg>
+            <div class="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-midnight-900/80 text-[10px] text-festive-gold font-mono">
+              Kitchen Fun
+            </div>
+          </div>
+          <h4 class="font-cinzel text-base font-bold text-white group-hover:text-festive-gold transition-colors">Gingerbread Baking Feast</h4>
+          <p class="font-outfit text-xs text-slate-300 mt-1 line-clamp-2">Flour on our noses, cinnamon in the air, and frosting roofs with candy canes and gumdrops.</p>
+        </div>
+
+        <!-- Memory Card 5 -->
+        <div class="memory-card glass-panel rounded-3xl p-4 border border-festive-gold/30 shadow-xl glass-card-hover group cursor-pointer" data-id="5">
+          <div class="w-full aspect-[4/3] rounded-2xl overflow-hidden mb-3 bg-midnight-950 relative">
+            <svg class="w-full h-full object-cover" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="400" height="300" fill="#0b1325"/>
+              <!-- Candlelit vigil -->
+              <circle cx="200" cy="150" r="100" fill="#ffbe0b" fill-opacity="0.15"/>
+              <rect x="190" y="140" width="20" height="90" fill="#fff5ea" rx="3"/>
+              <!-- Candle flame -->
+              <path d="M 200 110 Q 210 125 200 138 Q 190 125 200 110 Z" fill="#ff9e2c"/>
+              <circle cx="200" cy="128" r="4" fill="#ffffff"/>
+              <!-- Holly sprig at base -->
+              <circle cx="190" cy="235" r="5" fill="#d9253c"/>
+              <circle cx="200" cy="238" r="5" fill="#d9253c"/>
+              <circle cx="210" cy="235" r="5" fill="#d9253c"/>
+            </svg>
+            <div class="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-midnight-900/80 text-[10px] text-festive-gold font-mono">
+              Midnight Vigil
+            </div>
+          </div>
+          <h4 class="font-cinzel text-base font-bold text-white group-hover:text-festive-gold transition-colors">Candlelight Caroling</h4>
+          <p class="font-outfit text-xs text-slate-300 mt-1 line-clamp-2">Singing Silent Night under the frosty stars as golden candle flames illuminated every smiling face.</p>
+        </div>
+
+        <!-- Memory Card 6 -->
+        <div class="memory-card glass-panel rounded-3xl p-4 border border-festive-gold/30 shadow-xl glass-card-hover group cursor-pointer" data-id="6">
+          <div class="w-full aspect-[4/3] rounded-2xl overflow-hidden mb-3 bg-midnight-950 relative">
+            <svg class="w-full h-full object-cover" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="400" height="300" fill="#060b18"/>
+              <!-- Starry night & Moon -->
+              <circle cx="320" cy="70" r="35" fill="#fffbe8"/>
+              <!-- Stars -->
+              <circle cx="80" cy="50" r="2" fill="#ffffff"/>
+              <circle cx="150" cy="80" r="2.5" fill="#f7d070"/>
+              <circle cx="220" cy="40" r="1.5" fill="#ffffff"/>
+              <circle cx="280" cy="110" r="2" fill="#ffffff"/>
+              <!-- Forest silhouette -->
+              <polygon points="50,220 80,140 110,220" fill="#091326"/>
+              <polygon points="120,240 160,130 200,240" fill="#0d1b33"/>
+              <polygon points="210,230 250,150 290,230" fill="#091326"/>
+              <!-- Snow ground -->
+              <rect x="0" y="220" width="400" height="80" fill="#162947"/>
+            </svg>
+            <div class="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-midnight-900/80 text-[10px] text-festive-gold font-mono">
+              Starlight Walk
+            </div>
+          </div>
+          <h4 class="font-cinzel text-base font-bold text-white group-hover:text-festive-gold transition-colors">Midnight Starlight Walk</h4>
+          <p class="font-outfit text-xs text-slate-300 mt-1 line-clamp-2">Footsteps crunching peacefully in the crisp night snow beneath constellations and the silver moon.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 9. SECRET CHRISTMAS SURPRISE (FULLSCREEN MODAL) -->
+  <div id="surpriseModal" class="fixed inset-0 z-50 bg-midnight-950/95 backdrop-blur-2xl flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-500">
+    <div class="relative w-full max-w-2xl glass-panel rounded-3xl p-8 sm:p-12 border-2 border-festive-gold shadow-[0_0_60px_rgba(212,175,55,0.4)] text-center overflow-hidden">
+      
+      <!-- Close Button -->
+      <button id="closeSurpriseModalBtn" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-midnight-800 border border-slate-600 text-slate-300 hover:text-white flex items-center justify-center text-sm transition-all hover:scale-110">
+        ✕
+      </button>
+
+      <!-- Golden Animated Snowflake Ornament -->
+      <div class="text-5xl mb-4 animate-bounce">
+        🌟
+      </div>
+
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-festive-gold/20 text-festive-brightGold border border-festive-gold/40 text-xs font-semibold uppercase tracking-wider mb-4">
+        ✦ A Secret Christmas Gift From The Heart ✦
+      </div>
+
+      <h3 class="font-cinzel text-3xl sm:text-4xl font-extrabold gold-gradient-text uppercase mb-4">
+        The Greatest Gift of All
+      </h3>
+
+      <div class="space-y-4 font-playfair text-slate-200 text-base sm:text-lg italic leading-relaxed text-left max-w-lg mx-auto bg-midnight-900/60 p-6 rounded-2xl border border-festive-gold/20">
+        <p>
+          "In the flurry of lights, wrappings, and festive songs, the truest magic of Christmas is neither bought in stores nor found beneath a tree.
+        </p>
+        <p>
+          It lives in the quiet moments of gratitude, the tight embrace of family, the laughter shared across dinner tables, and the silent kindness we offer to one another.
+        </p>
+        <p class="text-festive-brightGold font-semibold">
+          May your life be blessed with health, peace, warmth, and the everlasting knowledge that you are cherished and deeply loved."
+        </p>
+      </div>
+
+      <!-- Make a Wish into the Sky Feature -->
+      <div class="mt-8 border-t border-slate-700/60 pt-6">
+        <h4 class="font-cinzel text-sm font-bold text-festive-gold uppercase tracking-wider mb-2">
+          Make a Christmas Wish to the Winter Stars
+        </h4>
+        <div class="flex gap-2 max-w-md mx-auto">
+          <input type="text" id="skyWishInput" placeholder="Type your holiday wish or prayer..." class="flex-1 px-4 py-2.5 rounded-xl bg-midnight-950 border border-festive-gold/40 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-festive-gold">
+          <button id="releaseSkyWishBtn" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-festive-gold to-festive-amber text-midnight-950 font-bold text-xs uppercase tracking-wider transition-all hover:scale-105 active:scale-95 whitespace-nowrap">
+            Release Wish ✨
+          </button>
+        </div>
+        <p id="wishConfirmationText" class="text-xs text-festive-lightGreen font-mono mt-2 hidden">
+          Your wish has taken flight among the northern stars! 🌌
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- UPLOAD MEMORY MODAL -->
+  <div id="uploadMemoryModal" class="fixed inset-0 z-50 bg-midnight-950/90 backdrop-blur-md flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="relative w-full max-w-md glass-panel rounded-3xl p-6 sm:p-8 border border-festive-gold/40 shadow-2xl">
+      <button id="closeUploadModalBtn" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-midnight-800 border border-slate-600 text-slate-300 hover:text-white flex items-center justify-center text-xs">
+        ✕
+      </button>
+
+      <h3 class="font-cinzel text-xl font-bold text-festive-gold uppercase mb-1">Add Cherished Memory</h3>
+      <p class="font-outfit text-xs text-slate-300 mb-4">Upload a local photograph to pin to your Christmas Memory Wall.</p>
+
+      <form id="memoryUploadForm" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Select Photo File</label>
+          <input type="file" id="memoryFileInput" accept="image/*" class="w-full text-xs text-slate-300 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-festive-gold file:text-midnight-950 hover:file:bg-festive-brightGold cursor-pointer">
+        </div>
+
+        <div id="filePreviewContainer" class="w-full aspect-[4/3] rounded-xl bg-midnight-950 border border-dashed border-slate-700 flex items-center justify-center text-xs text-slate-500 overflow-hidden hidden">
+          <img id="imagePreviewElement" class="w-full h-full object-cover" alt="Memory Preview">
+        </div>
+
+        <div>
+          <label for="memoryTitleInput" class="block text-xs font-semibold text-slate-300 uppercase mb-1">Memory Title</label>
+          <input type="text" id="memoryTitleInput" required placeholder="e.g. Christmas Eve Dinner with Grandma" class="w-full px-3 py-2 rounded-xl bg-midnight-950 border border-slate-700 text-sm text-white focus:outline-none focus:border-festive-gold">
+        </div>
+
+        <div>
+          <label for="memoryDateInput" class="block text-xs font-semibold text-slate-300 uppercase mb-1">Year / Date</label>
+          <input type="text" id="memoryDateInput" placeholder="e.g. December 2026" class="w-full px-3 py-2 rounded-xl bg-midnight-950 border border-slate-700 text-sm text-white focus:outline-none focus:border-festive-gold">
+        </div>
+
+        <div>
+          <label for="memoryStoryInput" class="block text-xs font-semibold text-slate-300 uppercase mb-1">Story / Description</label>
+          <textarea id="memoryStoryInput" rows="2" placeholder="Write a short memory note..." class="w-full px-3 py-2 rounded-xl bg-midnight-950 border border-slate-700 text-sm text-white focus:outline-none focus:border-festive-gold"></textarea>
+        </div>
+
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-festive-gold to-festive-amber hover:from-festive-brightGold hover:to-festive-gold text-midnight-950 font-bold text-xs uppercase tracking-wider transition-all">
+          Pin to Memory Wall 📌
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MEMORY LIGHTBOX MODAL -->
+  <div id="memoryLightboxModal" class="fixed inset-0 z-50 bg-midnight-950/95 backdrop-blur-xl flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="relative w-full max-w-2xl glass-panel rounded-3xl p-6 border border-festive-gold/40 shadow-2xl flex flex-col items-center">
+      <button id="closeLightboxBtn" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-midnight-800 border border-slate-600 text-slate-300 hover:text-white flex items-center justify-center text-xs">
+        ✕
+      </button>
+      <div id="lightboxVisualContainer" class="w-full aspect-[4/3] rounded-2xl overflow-hidden bg-midnight-950 mb-4 flex items-center justify-center"></div>
+      <h3 id="lightboxTitle" class="font-cinzel text-xl font-bold text-festive-gold mb-1"></h3>
+      <span id="lightboxDate" class="text-xs text-slate-400 font-mono mb-2"></span>
+      <p id="lightboxDescription" class="font-outfit text-sm text-slate-200 text-center max-w-lg"></p>
+    </div>
+  </div>
+
+  <!-- 10. POLISHED FOOTER -->
+  <footer class="relative py-12 px-4 bg-midnight-950 border-t border-festive-gold/20 text-center">
+    <div class="max-w-4xl mx-auto flex flex-col items-center">
+      
+      <!-- Crown Icon -->
+      <div class="text-3xl mb-3">⭐</div>
+
+      <!-- Main Footer Message -->
+      <p class="font-cinzel text-lg sm:text-xl font-bold gold-gradient-text tracking-wide uppercase mb-2">
+        Made with love. Shared with everyone. Merry Christmas 2026!
+      </p>
+
+      <p class="font-playfair italic text-slate-400 text-xs sm:text-sm max-w-md mb-6">
+        "May the spirit of Christmas bring you peace, the gladness of Christmas give you hope, and the warmth of Christmas grant you love."
+      </p>
+
+      <!-- Footer Quick Jump Links -->
+      <div class="flex flex-wrap justify-center gap-4 text-xs text-slate-400 font-medium mb-8">
+        <a href="#hero" class="hover:text-festive-gold transition-colors">Intro</a>
+        <a href="#world3d" class="hover:text-festive-gold transition-colors">3D World</a>
+        <a href="#greeting" class="hover:text-festive-gold transition-colors">Greeting</a>
+        <a href="#cardStudio" class="hover:text-festive-gold transition-colors">Card Studio</a>
+        <a href="#countdown" class="hover:text-festive-gold transition-colors">Countdown</a>
+        <a href="#magicGift" class="hover:text-festive-gold transition-colors">Gift Box</a>
+        <a href="#musicSection" class="hover:text-festive-gold transition-colors">Carols</a>
+        <a href="#memoryWall" class="hover:text-festive-gold transition-colors">Memory Wall</a>
+      </div>
+
+      <!-- Secret Surprise Footer Button -->
+      <button id="footerSurpriseBtn" class="px-6 py-3 rounded-2xl bg-gradient-to-r from-festive-ruby via-festive-brightRuby to-rose-700 hover:from-festive-brightRuby hover:to-festive-ruby text-white font-cinzel font-bold text-xs uppercase tracking-widest shadow-xl shadow-festive-ruby/30 transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
+        <span>✦</span> A Little Christmas Surprise <span>✦</span>
+      </button>
+
+      <div class="mt-8 text-[11px] text-slate-500 font-mono">
+        © 2026 Christmas Wonderland Experience · High Performance Three.js & Web Audio API
+      </div>
+
+      <!-- Back to Top Button -->
+      <button id="backToTopBtn" class="mt-4 text-xs text-festive-gold/70 hover:text-festive-gold transition-colors flex items-center gap-1">
+        <span>▲</span> Back to Top
+      </button>
+
+    </div>
+  </footer>
+
+  <!-- SCRIPT ARCHITECTURE -->
+  <script>
+    /* ==========================================================
+       CHRISTMAS WONDERLAND CORE JAVASCRIPT ENGINE
+       1. Audio Synthesizer (Web Audio API)
+       2. Snowfall Physics Canvas (2D)
+       3. Three.js Interactive 3D World
+       4. Countdown Engine (Dec 25, 2026)
+       5. 3D Interactive Gift Box
+       6. Personalized Card Studio & WhatsApp Sharing
+       7. Memory Wall & Uploads
+       8. Cursor & Sparks Particles
+       9. Modals & Surprise Sky Wishes
+       ========================================================== */
+
+    // Loading Screen Simulation
+    window.addEventListener('DOMContentLoaded', () => {
+      const progressBar = document.getElementById('loadingProgressBar');
+      const progressText = document.getElementById('loadingPercentText');
+      const curtain = document.getElementById('loadingCurtain');
+      
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += Math.floor(Math.random() * 20) + 15;
+        if (progress > 100) progress = 100;
+        
+        if (progressBar) progressBar.style.width = progress + '%';
+        if (progressText) progressText.textContent = 'Loading Experience... ' + progress + '%';
+
+        if (progress >= 100) {
+          clearInterval(interval);
+          setTimeout(() => {
+            if (curtain) {
+              curtain.style.opacity = '0';
+              setTimeout(() => curtain.style.display = 'none', 1000);
+            }
+          }, 300);
+        }
+      }, 100);
+    });
+
+    /* ==========================================================
+       1. WEB AUDIO API SYNTHESIZER (CHRISTMAS CAROLS & CHIMES)
+       ========================================================== */
+    class ChristmasAudioEngine {
+      constructor() {
+        this.ctx = null;
+        this.isPlaying = false;
+        this.isMuted = false;
+        this.volume = 0.7;
+        this.currentSongIndex = 0;
+        this.currentNoteTimeout = null;
+        this.currentStep = 0;
+        this.masterGain = null;
+        this.analyser = null;
+
+        // Frequencies
+        this.N = {
+          'C4': 261.63, 'D4': 293.66, 'Eb4': 311.13, 'E4': 329.63, 'F4': 349.23, 'F#4': 369.99,
+          'G4': 392.00, 'G#4': 415.30, 'A4': 440.00, 'Bb4': 466.16, 'B4': 493.88,
+          'C5': 523.25, 'C#5': 554.37, 'D5': 587.33, 'E5': 659.25, 'F5': 698.46, 'F#5': 739.99,
+          'G5': 783.99, 'A5': 880.00, 'B5': 987.77, 'C6': 1046.50, 'REST': 0
+        };
+
+        // Carols Melody Scores [note, durationInBeats]
+        this.songs = [
+          {
+            title: "We Wish You a Merry Christmas",
+            tempo: 160,
+            melody: [
+              ['D4',1], ['G4',1], ['G4',0.5], ['A4',0.5], ['G4',0.5], ['F#4',0.5],
+              ['E4',1], ['E4',1], ['E4',1], ['A4',1], ['A4',0.5], ['B4',0.5],
+              ['A4',0.5], ['G4',0.5], ['F#4',1], ['D4',1], ['D4',1], ['B4',1],
+              ['B4',0.5], ['C5',0.5], ['B4',0.5], ['A4',0.5], ['G4',1], ['E4',1],
+              ['D4',0.5], ['D4',0.5], ['E4',1], ['A4',1], ['F#4',1], ['G4',2]
+            ]
+          },
+          {
+            title: "Jingle Bells",
+            tempo: 190,
+            melody: [
+              ['E4',1], ['E4',1], ['E4',2], ['E4',1], ['E4',1], ['E4',2],
+              ['E4',1], ['G4',1], ['C4',1.5], ['D4',0.5], ['E4',3], ['REST',0.5],
+              ['F4',1], ['F4',1], ['F4',1.5], ['F4',0.5], ['F4',1], ['E4',1],
+              ['E4',1], ['E4',0.5], ['E4',0.5], ['E4',1], ['D4',1], ['D4',1],
+              ['E4',1], ['D4',2], ['G4',2], ['E4',1], ['E4',1], ['E4',2],
+              ['E4',1], ['E4',1], ['E4',2], ['E4',1], ['G4',1], ['C4',1.5],
+              ['D4',0.5], ['E4',3], ['REST',0.5], ['F4',1], ['F4',1], ['F4',1.5],
+              ['F4',0.5], ['F4',1], ['E4',1], ['E4',1], ['E4',0.5], ['E4',0.5],
+              ['G4',1], ['G4',1], ['F4',1], ['D4',1], ['C4',3]
+            ]
+          },
+          {
+            title: "Silent Night",
+            tempo: 110,
+            melody: [
+              ['G4',1.5], ['A4',0.5], ['G4',1], ['E4',3],
+              ['G4',1.5], ['A4',0.5], ['G4',1], ['E4',3],
+              ['D5',2], ['D5',1], ['B4',3], ['C5',2], ['C5',1], ['G4',3],
+              ['A4',2], ['A4',1], ['C5',1.5], ['B4',0.5], ['A4',1],
+              ['G4',1.5], ['A4',0.5], ['G4',1], ['E4',3],
+              ['D5',2], ['D5',1], ['F5',1.5], ['D5',0.5], ['B4',1],
+              ['C5',3], ['E5',2], ['REST',1],
+              ['C5',1.5], ['G4',0.5], ['E4',1], ['G4',1.5], ['F4',0.5], ['D4',1], ['C4',4]
+            ]
+          },
+          {
+            title: "Deck the Halls",
+            tempo: 170,
+            melody: [
+              ['G4',1.5], ['F4',0.5], ['E4',1], ['D4',1], ['C4',1], ['D4',1], ['E4',1], ['C4',1],
+              ['D4',0.5], ['E4',0.5], ['F4',0.5], ['D4',0.5], ['E4',1.5], ['D4',0.5], ['C4',1], ['B4',1], ['C4',2],
+              ['G4',1.5], ['F4',0.5], ['E4',1], ['D4',1], ['C4',1], ['D4',1], ['E4',1], ['C4',1],
+              ['D4',0.5], ['E4',0.5], ['F4',0.5], ['D4',0.5], ['E4',1.5], ['D4',0.5], ['C4',1], ['B4',1], ['C4',2],
+              ['D4',1.5], ['E4',0.5], ['F4',1], ['D4',1], ['E4',1.5], ['F4',0.5], ['G4',1], ['D4',1],
+              ['E4',0.5], ['F#4',0.5], ['G4',1], ['A4',0.5], ['B4',0.5], ['C5',1], ['B4',1], ['A4',1], ['G4',2],
+              ['G4',1.5], ['F4',0.5], ['E4',1], ['D4',1], ['C4',1], ['D4',1], ['E4',1], ['C4',1],
+              ['A4',1], ['A4',1], ['A4',1], ['A4',1], ['G4',1.5], ['F4',0.5], ['E4',1], ['D4',1], ['C4',3]
+            ]
+          }
+        ];
+      }
+
+      initContext() {
+        if (!this.ctx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioContextClass();
+          this.masterGain = this.ctx.createGain();
+          this.analyser = this.ctx.createAnalyser();
+          this.analyser.fftSize = 64;
+
+          this.masterGain.connect(this.analyser);
+          this.analyser.connect(this.ctx.destination);
+          this.setVolume(this.volume);
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      playNote(freq, durationSec) {
+        if (!this.ctx || freq <= 0 || this.isMuted) return;
+
+        const now = this.ctx.currentTime;
+        
+        // Celesta Bell Chime: Dual Oscillators (Sine + Harmonic Triangle)
+        const osc1 = this.ctx.createOscillator();
+        const osc2 = this.ctx.createOscillator();
+        const noteGain = this.ctx.createGain();
+
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(freq, now);
+
+        osc2.type = 'triangle';
+        osc2.frequency.setValueAtTime(freq * 2, now); // Octave overtone for bell shimmer
+
+        // Chime Envelope (instant crisp attack, exponential decay)
+        noteGain.gain.setValueAtTime(0.001, now);
+        noteGain.gain.exponentialRampToValueAtTime(0.35, now + 0.015);
+        noteGain.gain.exponentialRampToValueAtTime(0.0001, now + durationSec * 0.95);
+
+        osc1.connect(noteGain);
+        osc2.connect(noteGain);
+        noteGain.connect(this.masterGain);
+
+        osc1.start(now);
+        osc2.start(now);
+        osc1.stop(now + durationSec);
+        osc2.stop(now + durationSec);
+
+        // Also add warm subtle sub-pad
+        const padOsc = this.ctx.createOscillator();
+        const padGain = this.ctx.createGain();
+        padOsc.type = 'sine';
+        padOsc.frequency.setValueAtTime(freq * 0.5, now);
+        padGain.gain.setValueAtTime(0.001, now);
+        padGain.gain.exponentialRampToValueAtTime(0.1, now + 0.08);
+        padGain.gain.exponentialRampToValueAtTime(0.0001, now + durationSec * 0.8);
+        padOsc.connect(padGain);
+        padGain.connect(this.masterGain);
+        padOsc.start(now);
+        padOsc.stop(now + durationSec);
+      }
+
+      playChimeFlourish() {
+        this.initContext();
+        const chimes = [this.N['C5'], this.N['E5'], this.N['G5'], this.N['C6'], this.N['G5'], this.N['C6']];
+        chimes.forEach((f, idx) => {
+          setTimeout(() => {
+            this.playNote(f, 1.2);
+          }, idx * 140);
+        });
+      }
+
+      playStep() {
+        if (!this.isPlaying) return;
+
+        const song = this.songs[this.currentSongIndex];
+        const beatSec = 60 / song.tempo;
+
+        if (this.currentStep >= song.melody.length) {
+          this.currentStep = 0; // Loop song
+        }
+
+        const [noteName, beats] = song.melody[this.currentStep];
+        const freq = this.N[noteName] || 0;
+        const dur = beats * beatSec;
+
+        if (freq > 0) {
+          this.playNote(freq, dur);
+        }
+
+        this.currentStep++;
+        this.currentNoteTimeout = setTimeout(() => {
+          this.playStep();
+        }, dur * 1000);
+      }
+
+      play() {
+        this.initContext();
+        this.isPlaying = true;
+        this.playStep();
+        this.updateUI();
+      }
+
+      pause() {
+        this.isPlaying = false;
+        if (this.currentNoteTimeout) {
+          clearTimeout(this.currentNoteTimeout);
+          this.currentNoteTimeout = null;
+        }
+        this.updateUI();
+      }
+
+      togglePlay() {
+        if (this.isPlaying) {
+          this.pause();
+        } else {
+          this.play();
+        }
+      }
+
+      nextTrack() {
+        this.currentSongIndex = (this.currentSongIndex + 1) % this.songs.length;
+        this.currentStep = 0;
+        if (this.isPlaying) {
+          this.pause();
+          this.play();
+        } else {
+          this.updateUI();
+        }
+      }
+
+      prevTrack() {
+        this.currentSongIndex = (this.currentSongIndex - 1 + this.songs.length) % this.songs.length;
+        this.currentStep = 0;
+        if (this.isPlaying) {
+          this.pause();
+          this.play();
+        } else {
+          this.updateUI();
+        }
+      }
+
+      selectSong(index) {
+        if (index >= 0 && index < this.songs.length) {
+          this.currentSongIndex = index;
+          this.currentStep = 0;
+          if (this.isPlaying) {
+            this.pause();
+            this.play();
+          } else {
+            this.updateUI();
+          }
+        }
+      }
+
+      setVolume(val) {
+        this.volume = Math.max(0, Math.min(1, parseFloat(val)));
+        if (this.masterGain && this.ctx) {
+          this.masterGain.gain.setValueAtTime(this.isMuted ? 0 : this.volume, this.ctx.currentTime);
+        }
+      }
+
+      toggleMute() {
+        this.isMuted = !this.isMuted;
+        this.setVolume(this.volume);
+        this.updateUI();
+      }
+
+      updateUI() {
+        const titleEl = document.getElementById('currentSongTitle');
+        const playIcon = document.getElementById('mainPlayIcon');
+        const navIcon = document.getElementById('navMusicIcon');
+        const navLabel = document.getElementById('navMusicLabel');
+        const muteIcon = document.getElementById('muteIcon');
+        const idleText = document.getElementById('visualizerIdleText');
+
+        if (titleEl) titleEl.textContent = this.songs[this.currentSongIndex].title;
+        if (playIcon) playIcon.textContent = this.isPlaying ? '❚❚' : '▶';
+        if (navIcon) navIcon.textContent = this.isPlaying ? '❚❚' : '▶';
+        if (navLabel) navLabel.textContent = this.isPlaying ? 'Playing' : 'Music';
+        if (muteIcon) muteIcon.textContent = this.isMuted ? '🔇' : '🔊';
+        if (idleText) idleText.style.display = this.isPlaying ? 'none' : 'flex';
+
+        // Update active song pill
+        document.querySelectorAll('.song-pill').forEach((pill, idx) => {
+          if (idx === this.currentSongIndex) {
+            pill.classList.add('bg-festive-gold/20', 'border-festive-gold', 'text-festive-gold');
+            pill.classList.remove('bg-midnight-900/60', 'border-slate-700', 'text-slate-300');
+          } else {
+            pill.classList.remove('bg-festive-gold/20', 'border-festive-gold', 'text-festive-gold');
+            pill.classList.add('bg-midnight-900/60', 'border-slate-700', 'text-slate-300');
+          }
+        });
+      }
+    }
+
+    const audioEngine = new ChristmasAudioEngine();
+
+    /* Real-Time Music Visualizer Canvas */
+    const visualizerCanvas = document.getElementById('musicVisualizerCanvas');
+    if (visualizerCanvas) {
+      const vCtx = visualizerCanvas.getContext('2d');
+      function renderVisualizer() {
+        requestAnimationFrame(renderVisualizer);
+
+        const width = visualizerCanvas.width = visualizerCanvas.clientWidth;
+        const height = visualizerCanvas.height = visualizerCanvas.clientHeight;
+        vCtx.clearRect(0, 0, width, height);
+
+        if (!audioEngine.isPlaying || !audioEngine.analyser) {
+          return;
+        }
+
+        const bufferLength = audioEngine.analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+        audioEngine.analyser.getByteFrequencyData(dataArray);
+
+        const barCount = 20;
+        const barWidth = (width / barCount) - 3;
+        
+        for (let i = 0; i < barCount; i++) {
+          const val = dataArray[i * 2] || 0;
+          const barHeight = Math.max(4, (val / 255) * height * 0.9);
+          const x = i * (barWidth + 3) + 2;
+          const y = height - barHeight;
+
+          // Golden-amber gradient
+          const grad = vCtx.createLinearGradient(0, y, 0, height);
+          grad.addColorStop(0, '#f7d070');
+          grad.addColorStop(0.5, '#d4af37');
+          grad.addColorStop(1, '#ff9e2c');
+
+          vCtx.fillStyle = grad;
+          vCtx.shadowColor = '#d4af37';
+          vCtx.shadowBlur = 8;
+          vCtx.fillRect(x, y, barWidth, barHeight);
+          vCtx.shadowBlur = 0;
+        }
+      }
+      renderVisualizer();
+    }
+
+    /* ==========================================================
+       2. REALISTIC 2D SNOWFALL PHYSICS CANVAS
+       ========================================================== */
+    const snowCanvas = document.getElementById('snowCanvas');
+    if (snowCanvas) {
+      const sCtx = snowCanvas.getContext('2d');
+      let flakes = [];
+      const flakeCount = 140;
+
+      function resizeSnow() {
+        snowCanvas.width = window.innerWidth;
+        snowCanvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resizeSnow);
+      resizeSnow();
+
+      class Snowflake {
+        constructor() {
+          this.reset(true);
+        }
+        reset(randomY) {
+          this.x = Math.random() * snowCanvas.width;
+          this.y = randomY ? Math.random() * snowCanvas.height : -10;
+          this.radius = Math.random() * 3.2 + 0.8;
+          this.speedY = Math.random() * 1.5 + 0.6;
+          this.speedX = (Math.random() - 0.5) * 0.8;
+          this.wobbleSpeed = Math.random() * 0.03 + 0.01;
+          this.wobbleAngle = Math.random() * Math.PI * 2;
+          this.opacity = Math.random() * 0.6 + 0.4;
+        }
+        update() {
+          this.wobbleAngle += this.wobbleSpeed;
+          this.x += this.speedX + Math.sin(this.wobbleAngle) * 0.6;
+          this.y += this.speedY;
+
+          if (this.y > snowCanvas.height + 10 || this.x < -20 || this.x > snowCanvas.width + 20) {
+            this.reset(false);
+          }
+        }
+        draw() {
+          sCtx.beginPath();
+          sCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+          sCtx.fillStyle = 'rgba(255, 255, 255, ' + this.opacity + ')';
+          sCtx.shadowColor = 'rgba(255, 255, 255, 0.8)';
+          sCtx.shadowBlur = this.radius > 2.5 ? 4 : 0;
+          sCtx.fill();
+        }
+      }
+
+      for (let i = 0; i < flakeCount; i++) {
+        flakes.push(new Snowflake());
+      }
+
+      function animateSnow() {
+        sCtx.clearRect(0, 0, snowCanvas.width, snowCanvas.height);
+        for (let i = 0; i < flakes.length; i++) {
+          flakes[i].update();
+          flakes[i].draw();
+        }
+        requestAnimationFrame(animateSnow);
+      }
+      animateSnow();
+    }
+
+    /* ==========================================================
+       3. THREE.JS 3D CHRISTMAS WORLD
+       ========================================================== */
+    const threeCanvas = document.getElementById('threeCanvas');
+    if (threeCanvas && typeof THREE !== 'undefined') {
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x060d1f);
+      scene.fog = new THREE.FogExp2(0x060d1f, 0.012);
+
+      const camera = new THREE.PerspectiveCamera(45, threeCanvas.clientWidth / threeCanvas.clientHeight, 0.1, 1000);
+      camera.position.set(0, 14, 42);
+
+      const renderer = new THREE.WebGLRenderer({
+        canvas: threeCanvas,
+        antialias: true,
+        alpha: false,
+        powerPreference: 'high-performance'
+      });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(threeCanvas.clientWidth, threeCanvas.clientHeight);
+      renderer.shadowMap.enabled = true;
+
+      // Lights
+      const ambientLight = new THREE.AmbientLight(0x1a2e55, 1.2);
+      scene.add(ambientLight);
+
+      const moonLight = new THREE.DirectionalLight(0xddeeff, 1.5);
+      moonLight.position.set(30, 60, 20);
+      scene.add(moonLight);
+
+      const treeTopLight = new THREE.PointLight(0xffe066, 3.0, 35);
+      treeTopLight.position.set(0, 17, 0);
+      scene.add(treeTopLight);
+
+      // 1. Snow Terrain
+      const terrainGeo = new THREE.PlaneGeometry(160, 160, 48, 48);
+      terrainGeo.rotateX(-Math.PI / 2);
+      const pos = terrainGeo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const vx = pos.getX(i);
+        const vz = pos.getZ(i);
+        // Soft rolling hills
+        const dist = Math.sqrt(vx * vx + vz * vz);
+        let vy = Math.sin(vx * 0.06) * 1.5 + Math.cos(vz * 0.06) * 1.5;
+        if (dist < 15) vy *= (dist / 15); // Flat center around grand tree
+        pos.setY(i, vy - 0.5);
+      }
+      terrainGeo.computeVertexNormals();
+
+      const snowMat = new THREE.MeshStandardMaterial({
+        color: 0xedf6fc,
+        roughness: 0.85,
+        metalness: 0.1
+      });
+      const terrain = new THREE.Mesh(terrainGeo, snowMat);
+      scene.add(terrain);
+
+      // 2. The Grand Christmas Tree
+      const treeGroup = new THREE.Group();
+
+      // Tree Trunk
+      const trunkGeo = new THREE.CylinderGeometry(0.9, 1.3, 5, 16);
+      const trunkMat = new THREE.MeshStandardMaterial({ color: 0x3d2314, roughness: 0.9 });
+      const trunk = new THREE.Mesh(trunkGeo, trunkMat);
+      trunk.position.y = 2.5;
+      treeGroup.add(trunk);
+
+      // Conical Branch Tiers (Layered evergreen foliage)
+      const tiers = [
+        { r: 7.0, h: 5.5, y: 5.0, col: 0x0c3822 },
+        { r: 5.8, h: 5.0, y: 8.5, col: 0x0f462a },
+        { r: 4.5, h: 4.5, y: 11.5, col: 0x135433 },
+        { r: 3.2, h: 4.0, y: 14.2, col: 0x17643d },
+        { r: 1.8, h: 3.2, y: 16.5, col: 0x1b7246 }
+      ];
+
+      tiers.forEach(t => {
+        const coneGeo = new THREE.ConeGeometry(t.r, t.h, 24);
+        const coneMat = new THREE.MeshStandardMaterial({
+          color: t.col,
+          roughness: 0.75,
+          metalness: 0.1
+        });
+        const cone = new THREE.Mesh(coneGeo, coneMat);
+        cone.position.y = t.y;
+        treeGroup.add(cone);
+      });
+
+      // 3D Tree Topper Golden Star
+      const starGeo = new THREE.OctahedronGeometry(1.2, 0);
+      starGeo.scale(1, 1.8, 0.5);
+      const starMat = new THREE.MeshStandardMaterial({
+        color: 0xffea75,
+        emissive: 0xffd700,
+        emissiveIntensity: 0.8,
+        metalness: 0.8,
+        roughness: 0.2
+      });
+      const star = new THREE.Mesh(starGeo, starMat);
+      star.position.set(0, 18.2, 0);
+      treeGroup.add(star);
+
+      // Shiny Baubles (Ornaments)
+      const ornamentColors = [0xd90429, 0xffd166, 0x118ab2, 0x06d6a0, 0xff758f, 0xf8f9fa];
+      const baubles = [];
+      const baubleGeo = new THREE.SphereGeometry(0.32, 16, 16);
+
+      for (let i = 0; i < 90; i++) {
+        const tier = tiers[Math.floor(Math.random() * tiers.length)];
+        const theta = Math.random() * Math.PI * 2;
+        const radius = tier.r * (0.6 + Math.random() * 0.35);
+        const y = tier.y - tier.h * 0.35 + Math.random() * (tier.h * 0.6);
+
+        const col = ornamentColors[Math.floor(Math.random() * ornamentColors.length)];
+        const bMat = new THREE.MeshStandardMaterial({
+          color: col,
+          roughness: 0.2,
+          metalness: 0.85
+        });
+        const bauble = new THREE.Mesh(baubleGeo, bMat);
+        bauble.position.set(Math.cos(theta) * radius, y, Math.sin(theta) * radius);
+        treeGroup.add(bauble);
+        baubles.push(bauble);
+      }
+
+      // Spiral Twinkling Fairy Lights (Helix Points)
+      const lightCount = 180;
+      const fairyGeo = new THREE.BufferGeometry();
+      const fairyPositions = new Float32Array(lightCount * 3);
+      const fairyColors = new Float32Array(lightCount * 3);
+
+      for (let i = 0; i < lightCount; i++) {
+        const progress = i / lightCount;
+        const angle = progress * Math.PI * 16; // 8 full turns
+        const currentRadius = 7.0 * (1 - progress * 0.85);
+        const currentY = 3.5 + progress * 13.5;
+
+        fairyPositions[i * 3] = Math.cos(angle) * currentRadius;
+        fairyPositions[i * 3 + 1] = currentY;
+        fairyPositions[i * 3 + 2] = Math.sin(angle) * currentRadius;
+
+        // Alternate gold and red
+        if (i % 2 === 0) {
+          fairyColors[i * 3] = 1.0; fairyColors[i * 3 + 1] = 0.85; fairyColors[i * 3 + 2] = 0.3;
+        } else {
+          fairyColors[i * 3] = 1.0; fairyColors[i * 3 + 1] = 0.2; fairyColors[i * 3 + 2] = 0.3;
+        }
+      }
+      fairyGeo.setAttribute('position', new THREE.BufferAttribute(fairyPositions, 3));
+      fairyGeo.setAttribute('color', new THREE.BufferAttribute(fairyColors, 3));
+
+      const fairyMat = new THREE.PointsMaterial({
+        size: 0.7,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.95
+      });
+      const fairyLights = new THREE.Points(fairyGeo, fairyMat);
+      treeGroup.add(fairyLights);
+
+      scene.add(treeGroup);
+
+      // 3. Cozy Snow Cabins / Houses
+      function createCabin(x, z, rot) {
+        const cabin = new THREE.Group();
+
+        // Log Walls
+        const wallGeo = new THREE.BoxGeometry(5, 3.5, 6);
+        const wallMat = new THREE.MeshStandardMaterial({ color: 0x4a2c16, roughness: 0.85 });
+        const walls = new THREE.Mesh(wallGeo, wallMat);
+        walls.position.y = 1.75;
+        cabin.add(walls);
+
+        // Snow-Covered Roof
+        const roofGeo = new THREE.ConeGeometry(5.2, 3.2, 4);
+        roofGeo.rotateY(Math.PI / 4);
+        const roofMat = new THREE.MeshStandardMaterial({ color: 0xf0f7fc, roughness: 0.7 });
+        const roof = new THREE.Mesh(roofGeo, roofMat);
+        roof.position.y = 4.8;
+        roof.scale.set(1.1, 1, 1.25);
+        cabin.add(roof);
+
+        // Glowing Amber Windows
+        const winGeo = new THREE.PlaneGeometry(1.2, 1.2);
+        const winMat = new THREE.MeshStandardMaterial({
+          color: 0xffd166,
+          emissive: 0xffa500,
+          emissiveIntensity: 1.0
+        });
+        const winFront = new THREE.Mesh(winGeo, winMat);
+        winFront.position.set(0, 2.0, 3.02);
+        cabin.add(winFront);
+
+        // Window warm light puddle
+        const winLight = new THREE.PointLight(0xffa500, 1.2, 10);
+        winLight.position.set(0, 2.0, 3.5);
+        cabin.add(winLight);
+
+        // Chimney
+        const chimGeo = new THREE.BoxGeometry(0.8, 2.5, 0.8);
+        const chimMat = new THREE.MeshStandardMaterial({ color: 0x663322 });
+        const chimney = new THREE.Mesh(chimGeo, chimMat);
+        chimney.position.set(1.5, 5.0, 1.0);
+        cabin.add(chimney);
+
+        cabin.position.set(x, 0, z);
+        cabin.rotation.y = rot;
+        scene.add(cabin);
+      }
+
+      createCabin(-18, 10, 0.4);
+      createCabin(20, -5, -0.6);
+      createCabin(-14, -20, 1.2);
+
+      // 4. Flying Santa's Sleigh & Reindeer
+      const sleighGroup = new THREE.Group();
+
+      // Sleigh Body
+      const sleighBodyGeo = new THREE.BoxGeometry(2.5, 1.2, 1.4);
+      const sleighMat = new THREE.MeshStandardMaterial({ color: 0xd90429, metalness: 0.6, roughness: 0.3 });
+      const sleighBody = new THREE.Mesh(sleighBodyGeo, sleighMat);
+      sleighGroup.add(sleighBody);
+
+      // Golden runners
+      const runnerGeo = new THREE.CylinderGeometry(0.08, 0.08, 3.2, 8);
+      runnerGeo.rotateZ(Math.PI / 2);
+      const goldRunnerMat = new THREE.MeshStandardMaterial({ color: 0xffd700, metalness: 0.9, roughness: 0.1 });
+      const runnerL = new THREE.Mesh(runnerGeo, goldRunnerMat);
+      runnerL.position.set(0, -0.7, 0.7);
+      const runnerR = new THREE.Mesh(runnerGeo, goldRunnerMat);
+      runnerR.position.set(0, -0.7, -0.7);
+      sleighGroup.add(runnerL);
+      sleighGroup.add(runnerR);
+
+      // 4 Reindeer team in front
+      for (let r = 0; r < 4; r++) {
+        const rein = new THREE.Group();
+        const rBodyGeo = new THREE.BoxGeometry(1.2, 0.7, 0.5);
+        const reinMat = new THREE.MeshStandardMaterial({ color: 0x5c3818 });
+        const rBody = new THREE.Mesh(rBodyGeo, reinMat);
+        rein.add(rBody);
+
+        // Antlers
+        const antGeo = new THREE.ConeGeometry(0.3, 0.8, 4);
+        const antMat = new THREE.MeshStandardMaterial({ color: 0xd4af37 });
+        const ant = new THREE.Mesh(antGeo, antMat);
+        ant.position.set(0.5, 0.7, 0);
+        rein.add(ant);
+
+        // Stagger reindeer positions in pairs
+        const rx = 3.5 + Math.floor(r / 2) * 2.8;
+        const rz = (r % 2 === 0 ? 0.6 : -0.6);
+        rein.position.set(rx, 0.1, rz);
+        sleighGroup.add(rein);
+      }
+
+      scene.add(sleighGroup);
+
+      // 5. 3D Snow Particle System
+      const snowCount = 2000;
+      const snowParticlesGeo = new THREE.BufferGeometry();
+      const snowPos = new Float32Array(snowCount * 3);
+      for (let i = 0; i < snowCount; i++) {
+        snowPos[i * 3] = (Math.random() - 0.5) * 120;
+        snowPos[i * 3 + 1] = Math.random() * 60;
+        snowPos[i * 3 + 2] = (Math.random() - 0.5) * 120;
+      }
+      snowParticlesGeo.setAttribute('position', new THREE.BufferAttribute(snowPos, 3));
+      const snowParticlesMat = new THREE.PointsMaterial({
+        color: 0xffffff,
+        size: 0.45,
+        transparent: true,
+        opacity: 0.8
+      });
+      const snowSystem = new THREE.Points(snowParticlesGeo, snowParticlesMat);
+      scene.add(snowSystem);
+
+      // 6. Northern Lights (Aurora Ribbon Mesh)
+      const auroraGeo = new THREE.PlaneGeometry(120, 25, 32, 8);
+      const auroraMat = new THREE.MeshBasicMaterial({
+        color: 0x00f5d4,
+        transparent: true,
+        opacity: 0.35,
+        side: THREE.DoubleSide
+      });
+      const aurora = new THREE.Mesh(auroraGeo, auroraMat);
+      aurora.position.set(0, 32, -60);
+      aurora.rotation.x = Math.PI * 0.1;
+      scene.add(aurora);
+
+      // Camera & Orbit State
+      let autoRotate = true;
+      let targetRotY = 0;
+      let targetRotX = 0.2;
+      let currentRotY = 0;
+      let currentRotX = 0.2;
+      let isDragging = false;
+      let prevMouseX = 0;
+      let prevMouseY = 0;
+      let camDistance = 42;
+
+      // Mouse drag controls on 3D canvas
+      threeCanvas.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        prevMouseX = e.clientX;
+        prevMouseY = e.clientY;
+      });
+      window.addEventListener('mouseup', () => isDragging = false);
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - prevMouseX;
+        const dy = e.clientY - prevMouseY;
+        prevMouseX = e.clientX;
+        prevMouseY = e.clientY;
+
+        targetRotY += dx * 0.006;
+        targetRotX = Math.max(-0.2, Math.min(0.8, targetRotX + dy * 0.006));
+      });
+
+      // Touch controls
+      threeCanvas.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          isDragging = true;
+          prevMouseX = e.touches[0].clientX;
+          prevMouseY = e.touches[0].clientY;
+        }
+      }, { passive: true });
+      window.addEventListener('touchend', () => isDragging = false);
+      window.addEventListener('touchmove', (e) => {
+        if (!isDragging || e.touches.length !== 1) return;
+        const dx = e.touches[0].clientX - prevMouseX;
+        const dy = e.touches[0].clientY - prevMouseY;
+        prevMouseX = e.touches[0].clientX;
+        prevMouseY = e.touches[0].clientY;
+
+        targetRotY += dx * 0.008;
+        targetRotX = Math.max(-0.2, Math.min(0.8, targetRotX + dy * 0.008));
+      }, { passive: true });
+
+      // Mouse scroll zoom
+      threeCanvas.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        camDistance = Math.max(18, Math.min(70, camDistance + e.deltaY * 0.05));
+      }, { passive: false });
+
+      // Viewpoint presets
+      const camTreeBtn = document.getElementById('camTreeBtn');
+      const camVillageBtn = document.getElementById('camVillageBtn');
+      const camSleighBtn = document.getElementById('camSleighBtn');
+      const camOrbitToggleBtn = document.getElementById('camOrbitToggleBtn');
+      const orbitIcon = document.getElementById('orbitIcon');
+
+      if (camTreeBtn) {
+        camTreeBtn.addEventListener('click', () => {
+          autoRotate = false;
+          camDistance = 24;
+          targetRotX = 0.2;
+          targetRotY = 0;
+          if (orbitIcon) orbitIcon.textContent = '⏸';
+          if (camOrbitToggleBtn) camOrbitToggleBtn.innerHTML = '<span>⏸</span> Auto-Rotate: OFF';
+        });
+      }
+
+      if (camVillageBtn) {
+        camVillageBtn.addEventListener('click', () => {
+          autoRotate = false;
+          camDistance = 50;
+          targetRotX = 0.35;
+          targetRotY = -0.8;
+          if (orbitIcon) orbitIcon.textContent = '⏸';
+          if (camOrbitToggleBtn) camOrbitToggleBtn.innerHTML = '<span>⏸</span> Auto-Rotate: OFF';
+        });
+      }
+
+      if (camSleighBtn) {
+        camSleighBtn.addEventListener('click', () => {
+          autoRotate = false;
+          camDistance = 55;
+          targetRotX = 0.05;
+          targetRotY = 1.6;
+          if (orbitIcon) orbitIcon.textContent = '⏸';
+          if (camOrbitToggleBtn) camOrbitToggleBtn.innerHTML = '<span>⏸</span> Auto-Rotate: OFF';
+        });
+      }
+
+      if (camOrbitToggleBtn) {
+        camOrbitToggleBtn.addEventListener('click', () => {
+          autoRotate = !autoRotate;
+          camOrbitToggleBtn.innerHTML = '<span>' + (autoRotate ? '🔄' : '⏸') + '</span> Auto-Rotate: ' + (autoRotate ? 'ON' : 'OFF');
+        });
+      }
+
+      // Mood Switchers
+      const moodMidnightBtn = document.getElementById('moodMidnightBtn');
+      const moodAuroraBtn = document.getElementById('moodAuroraBtn');
+      const moodSunsetBtn = document.getElementById('moodSunsetBtn');
+
+      function resetMoodButtons() {
+        [moodMidnightBtn, moodAuroraBtn, moodSunsetBtn].forEach(b => {
+          if (b) {
+            b.classList.remove('bg-festive-gold/20', 'text-festive-gold');
+            b.classList.add('bg-midnight-800/80', 'text-slate-300');
+          }
+        });
+      }
+
+      if (moodMidnightBtn) {
+        moodMidnightBtn.addEventListener('click', () => {
+          resetMoodButtons();
+          moodMidnightBtn.classList.add('bg-festive-gold/20', 'text-festive-gold');
+          scene.background.set(0x060d1f);
+          scene.fog.color.set(0x060d1f);
+          auroraMat.color.set(0x00f5d4);
+          moonLight.color.set(0xddeeff);
+        });
+      }
+
+      if (moodAuroraBtn) {
+        moodAuroraBtn.addEventListener('click', () => {
+          resetMoodButtons();
+          moodAuroraBtn.classList.add('bg-festive-gold/20', 'text-festive-gold');
+          scene.background.set(0x04192b);
+          scene.fog.color.set(0x04192b);
+          auroraMat.color.set(0x38bdf8);
+          auroraMat.opacity = 0.6;
+          moonLight.color.set(0x80ffdb);
+        });
+      }
+
+      if (moodSunsetBtn) {
+        moodSunsetBtn.addEventListener('click', () => {
+          resetMoodButtons();
+          moodSunsetBtn.classList.add('bg-festive-gold/20', 'text-festive-gold');
+          scene.background.set(0x280f1d);
+          scene.fog.color.set(0x280f1d);
+          auroraMat.color.set(0xff758f);
+          moonLight.color.set(0xffbe0b);
+        });
+      }
+
+      // Responsive Resize
+      window.addEventListener('resize', () => {
+        if (!threeCanvas) return;
+        camera.aspect = threeCanvas.clientWidth / threeCanvas.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(threeCanvas.clientWidth, threeCanvas.clientHeight);
+      });
+
+      // 3D Animation Loop
+      let clock = new THREE.Clock();
+      function animate3D() {
+        requestAnimationFrame(animate3D);
+        const elapsedTime = clock.getElapsedTime();
+
+        // 1. Star Rotation & Pulse
+        star.rotation.y = elapsedTime * 0.8;
+        treeTopLight.intensity = 2.4 + Math.sin(elapsedTime * 3) * 0.8;
+
+        // 2. Fairy lights shimmer
+        const colorsAttr = fairyGeo.attributes.color;
+        for (let i = 0; i < lightCount; i++) {
+          const shift = Math.sin(elapsedTime * 4 + i * 0.2);
+          if (shift > 0.3) {
+            colorsAttr.setX(i, 1.0); colorsAttr.setY(i, 0.95); colorsAttr.setZ(i, 0.4);
+          } else {
+            colorsAttr.setX(i, 0.9); colorsAttr.setY(i, 0.2); colorsAttr.setZ(i, 0.3);
+          }
+        }
+        colorsAttr.needsUpdate = true;
+
+        // 3. Flying Sleigh Flight Path (Orbiting over the village)
+        const sleighAngle = elapsedTime * 0.35;
+        const sleighRadius = 38;
+        sleighGroup.position.x = Math.cos(sleighAngle) * sleighRadius;
+        sleighGroup.position.z = Math.sin(sleighAngle) * sleighRadius;
+        sleighGroup.position.y = 16 + Math.sin(elapsedTime * 1.5) * 3;
+        sleighGroup.rotation.y = -sleighAngle - Math.PI / 2;
+        sleighGroup.rotation.z = Math.sin(elapsedTime * 1.5) * 0.12;
+
+        // 4. Aurora Waves
+        const aPos = auroraGeo.attributes.position;
+        for (let i = 0; i < aPos.count; i++) {
+          const vx = aPos.getX(i);
+          const vy = Math.sin(vx * 0.08 + elapsedTime * 1.2) * 2.5;
+          aPos.setZ(i, vy);
+        }
+        auroraGeo.computeVertexNormals();
+        aPos.needsUpdate = true;
+
+        // 5. 3D Snow Falling
+        const sPositions = snowParticlesGeo.attributes.position.array;
+        for (let i = 0; i < snowCount; i++) {
+          sPositions[i * 3 + 1] -= 0.18; // Fall speed
+          sPositions[i * 3] += Math.sin(elapsedTime + i) * 0.03;
+          if (sPositions[i * 3 + 1] < 0) {
+            sPositions[i * 3 + 1] = 55;
+          }
+        }
+        snowParticlesGeo.attributes.position.needsUpdate = true;
+
+        // 6. Camera Orbit Damping
+        if (autoRotate && !isDragging) {
+          targetRotY += 0.0025;
+        }
+        currentRotY += (targetRotY - currentRotY) * 0.08;
+        currentRotX += (targetRotX - currentRotX) * 0.08;
+
+        camera.position.x = Math.sin(currentRotY) * Math.cos(currentRotX) * camDistance;
+        camera.position.z = Math.cos(currentRotY) * Math.cos(currentRotX) * camDistance;
+        camera.position.y = Math.sin(currentRotX) * camDistance + 8;
+        camera.lookAt(0, 8, 0);
+
+        renderer.render(scene, camera);
+      }
+      animate3D();
+    }
+
+    /* ==========================================================
+       4. MAGICAL CHRISTMAS COUNTDOWN (DECEMBER 25, 2026)
+       ========================================================== */
+    function updateCountdown() {
+      // Christmas Target: Dec 25, 2026 00:00:00
+      const targetDate = new Date('2026-12-25T00:00:00');
+      const now = new Date();
+      const diff = targetDate.getTime() - now.getTime();
+
+      const daysEl = document.getElementById('daysNum');
+      const hoursEl = document.getElementById('hoursNum');
+      const minutesEl = document.getElementById('minutesNum');
+      const secondsEl = document.getElementById('secondsNum');
+      const bannerEl = document.getElementById('christmasCelebrationBanner');
+      const gridEl = document.getElementById('countdownGrid');
+
+      if (diff <= 0) {
+        // Christmas Day has arrived!
+        if (gridEl) gridEl.style.display = 'none';
+        if (bannerEl) bannerEl.classList.remove('hidden');
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
+      if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+      if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
+      if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
+    }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    /* ==========================================================
+       5. INTERACTIVE 3D GIFT BOX
+       ========================================================== */
+    const interactiveGiftBox = document.getElementById('interactiveGiftBox');
+    const giftTapHint = document.getElementById('giftTapHint');
+    const giftMessageReveal = document.getElementById('giftMessageReveal');
+    const resetGiftBtn = document.getElementById('resetGiftBtn');
+    const revealedGiftTitle = document.getElementById('revealedGiftTitle');
+    const revealedGiftMessage = document.getElementById('revealedGiftMessage');
+
+    const holidayGifts = [
+      {
+        title: "Gift of Christmas Wonder",
+        msg: "May your days be painted with warm memories, your laughter be abundant, and may every morning bring a new reason to smile. You are truly cherished!"
+      },
+      {
+        title: "Gift of Serenity & Peace",
+        msg: "May quiet stillness wrap around your heart like freshly fallen snow. May you find tranquility and harmony in the simple joys of this season."
+      },
+      {
+        title: "Gift of Boundless Joy",
+        msg: "May sparkling laughter fill your home and radiant cheer guide your footsteps into an extraordinary, bright, and prosperous New Year!"
+      },
+      {
+        title: "Gift of Deep Friendship & Love",
+        msg: "The greatest treasures are the bonds we share. Thank you for bringing warmth, kindness, and light into the world. Merry Christmas!"
+      }
+    ];
+    let giftIndex = 0;
+
+    if (interactiveGiftBox) {
+      interactiveGiftBox.addEventListener('click', () => {
+        if (interactiveGiftBox.classList.contains('opened')) return;
+
+        // Rumble shake
+        interactiveGiftBox.classList.add('shaking');
+        audioEngine.playChimeFlourish();
+
+        setTimeout(() => {
+          interactiveGiftBox.classList.remove('shaking');
+          interactiveGiftBox.classList.add('opened');
+
+          // Trigger Confetti Explosion
+          if (typeof confetti === 'function') {
+            confetti({
+              particleCount: 80,
+              spread: 70,
+              origin: { y: 0.6 },
+              colors: ['#ffd700', '#d4af37', '#ff2a4b', '#06d6a0', '#ffffff']
+            });
+            setTimeout(() => {
+              confetti({
+                particleCount: 50,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0.2, y: 0.6 }
+              });
+              confetti({
+                particleCount: 50,
+                angle: 120,
+                spread: 55,
+                origin: { x: 0.8, y: 0.6 }
+              });
+            }, 250);
+          }
+
+          if (giftTapHint) giftTapHint.style.display = 'none';
+
+          // Reveal Message
+          const curGift = holidayGifts[giftIndex % holidayGifts.length];
+          if (revealedGiftTitle) revealedGiftTitle.textContent = curGift.title;
+          if (revealedGiftMessage) revealedGiftMessage.textContent = '"' + curGift.msg + '"';
+          if (giftMessageReveal) {
+            giftMessageReveal.classList.remove('hidden');
+          }
+          giftIndex++;
+        }, 500);
+      });
+    }
+
+    if (resetGiftBtn) {
+      resetGiftBtn.addEventListener('click', () => {
+        if (interactiveGiftBox) {
+          interactiveGiftBox.classList.remove('opened');
+        }
+        if (giftMessageReveal) giftMessageReveal.classList.add('hidden');
+        if (giftTapHint) giftTapHint.style.display = 'block';
+      });
+    }
+
+    /* ==========================================================
+       6. PERSONALIZED GREETING CARD STUDIO & SHARING
+       ========================================================== */
+    const cardRecipientInput = document.getElementById('cardRecipientInput');
+    const cardSenderInput = document.getElementById('cardSenderInput');
+    const cardMessagePreset = document.getElementById('cardMessagePreset');
+    const cardCustomMessage = document.getElementById('cardCustomMessage');
+    const cardPreviewTo = document.getElementById('cardPreviewTo');
+    const cardPreviewFrom = document.getElementById('cardPreviewFrom');
+    const cardPreviewBody = document.getElementById('cardPreviewBody');
+    const liveCardPreview = document.getElementById('liveCardPreview');
+    const cardToast = document.getElementById('cardToast');
+
+    function updateCardPreview() {
+      const toVal = (cardRecipientInput && cardRecipientInput.value.trim()) || "Beloved Family & Friends";
+      const fromVal = (cardSenderInput && cardSenderInput.value.trim()) || "With boundless love & joy";
+      
+      let msgVal = "";
+      if (cardMessagePreset && cardMessagePreset.value === 'custom') {
+        msgVal = (cardCustomMessage && cardCustomMessage.value.trim()) || "Wishing you peace, happiness, and every blessing this Christmas!";
+      } else if (cardMessagePreset) {
+        const option = cardMessagePreset.options[cardMessagePreset.selectedIndex];
+        msgVal = option ? option.text.replace(/^"|"$/g, '') : "Wishing you endless peace, warm memories, and boundless happiness.";
+      }
+
+      if (cardPreviewTo) cardPreviewTo.textContent = 'Dearest ' + toVal + ',';
+      if (cardPreviewFrom) cardPreviewFrom.textContent = fromVal;
+      if (cardPreviewBody) cardPreviewBody.textContent = '"' + msgVal + '"';
+    }
+
+    if (cardRecipientInput) cardRecipientInput.addEventListener('input', updateCardPreview);
+    if (cardSenderInput) cardSenderInput.addEventListener('input', updateCardPreview);
+    if (cardCustomMessage) cardCustomMessage.addEventListener('input', updateCardPreview);
+    if (cardMessagePreset) {
+      cardMessagePreset.addEventListener('change', () => {
+        if (cardMessagePreset.value === 'custom') {
+          if (cardCustomMessage) cardCustomMessage.classList.remove('hidden');
+        } else {
+          if (cardCustomMessage) cardCustomMessage.classList.add('hidden');
+        }
+        updateCardPreview();
+      });
+    }
+
+    // Card Visual Themes
+    const styleThemes = {
+      emerald: "bg-gradient-to-br from-[#0c3d25] via-[#082a19] to-[#04160d] border-festive-gold",
+      ruby: "bg-gradient-to-br from-[#590d18] via-[#38040e] to-[#1f0208] border-festive-brightRuby",
+      aurora: "bg-gradient-to-br from-[#061e38] via-[#0f2c4c] to-[#1a1440] border-cyan-400",
+      gold: "bg-gradient-to-br from-[#2b2006] via-[#1a1403] to-[#0d0901] border-amber-300"
+    };
+
+    document.querySelectorAll('.style-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const style = btn.getAttribute('data-style');
+        document.querySelectorAll('.style-btn').forEach(b => {
+          b.classList.remove('border-2', 'border-festive-gold', 'text-festive-brightGold');
+          b.classList.add('border', 'border-slate-700', 'text-slate-300');
+        });
+        btn.classList.add('border-2', 'border-festive-gold', 'text-festive-brightGold');
+        btn.classList.remove('border-slate-700', 'text-slate-300');
+
+        if (liveCardPreview && styleThemes[style]) {
+          liveCardPreview.className = 'relative w-full max-w-lg aspect-[4/3] rounded-3xl p-8 sm:p-10 flex flex-col justify-between border-4 shadow-2xl transition-all duration-500 overflow-hidden ' + styleThemes[style];
+        }
+      });
+    });
+
+    // Toast Helper
+    function showCardToast(msg) {
+      if (!cardToast) return;
+      cardToast.textContent = msg;
+      cardToast.style.opacity = '1';
+      setTimeout(() => cardToast.style.opacity = '0', 2500);
+    }
+
+    // Copy Message Text
+    const copyGreetingTextBtn = document.getElementById('copyGreetingTextBtn');
+    if (copyGreetingTextBtn) {
+      copyGreetingTextBtn.addEventListener('click', () => {
+        const to = (cardRecipientInput && cardRecipientInput.value.trim()) || "Beloved Family & Friends";
+        const from = (cardSenderInput && cardSenderInput.value.trim()) || "With love";
+        const body = (cardPreviewBody && cardPreviewBody.textContent) || "";
+        const fullGreeting = '🎄 MERRY CHRISTMAS 2026 🎄\n\nDearest ' + to + ',\n\n' + body + '\n\n- ' + from + '\n\nCreated with Christmas Wonderland: ' + window.location.href;
+
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(fullGreeting).then(() => showCardToast("Greeting text copied to clipboard!"));
+          } else {
+            const ta = document.createElement('textarea');
+            ta.value = fullGreeting;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            showCardToast("Greeting text copied!");
+          }
+        } catch (e) {
+          showCardToast("Greeting text copied!");
+        }
+      });
+    }
+
+    // Share via WhatsApp
+    const shareWhatsAppBtn = document.getElementById('shareWhatsAppBtn');
+    if (shareWhatsAppBtn) {
+      shareWhatsAppBtn.addEventListener('click', () => {
+        const to = (cardRecipientInput && cardRecipientInput.value.trim()) || "Beloved Family & Friends";
+        const from = (cardSenderInput && cardSenderInput.value.trim()) || "With love";
+        const body = (cardPreviewBody && cardPreviewBody.textContent) || "";
+        const text = '🎄 *MERRY CHRISTMAS!* 🎄\n\n*Dearest ' + to + ',*\n\n' + body + '\n\n✨ *' + from + '*\n\nExplore this magical greeting on Christmas Wonderland:\n' + window.location.href;
+        const waUrl = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(text);
+        window.open(waUrl, '_blank');
+      });
+    }
+
+    // Copy Shareable Card Link
+    const copyShareLinkBtn = document.getElementById('copyShareLinkBtn');
+    if (copyShareLinkBtn) {
+      copyShareLinkBtn.addEventListener('click', () => {
+        const to = encodeURIComponent((cardRecipientInput && cardRecipientInput.value.trim()) || "");
+        const from = encodeURIComponent((cardSenderInput && cardSenderInput.value.trim()) || "");
+        const shareUrl = window.location.origin + window.location.pathname + '#to=' + to + '&from=' + from;
+
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(shareUrl).then(() => showCardToast("Card link copied to clipboard!"));
+          } else {
+            showCardToast("Card link copied!");
+          }
+        } catch (e) {
+          showCardToast("Card link ready!");
+        }
+      });
+    }
+
+    // Download Card as Image (Offscreen HTML5 Canvas Rendering)
+    const downloadCardBtn = document.getElementById('downloadCardBtn');
+    if (downloadCardBtn) {
+      downloadCardBtn.addEventListener('click', () => {
+        const offCanvas = document.createElement('canvas');
+        offCanvas.width = 1200;
+        offCanvas.height = 900;
+        const ctx = offCanvas.getContext('2d');
+
+        // Background Gradient
+        const grad = ctx.createLinearGradient(0, 0, 1200, 900);
+        grad.addColorStop(0, '#0c3d25');
+        grad.addColorStop(0.5, '#082a19');
+        grad.addColorStop(1, '#04160d');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, 1200, 900);
+
+        // Gold border
+        ctx.strokeStyle = '#d4af37';
+        ctx.lineWidth = 12;
+        ctx.strokeRect(30, 30, 1140, 840);
+
+        ctx.strokeStyle = '#f7d070';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(50, 50, 1100, 800);
+
+        // Header
+        ctx.fillStyle = '#f7d070';
+        ctx.font = 'bold 36px Cinzel, serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('🎄  WARMEST HOLIDAY GREETINGS  🎄', 600, 140);
+
+        // Recipient
+        const to = (cardPreviewTo && cardPreviewTo.textContent) || "Dearest Loved Ones,";
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 52px "Playfair Display", serif';
+        ctx.fillText(to, 600, 290);
+
+        // Message
+        const msg = (cardPreviewBody && cardPreviewBody.textContent) || '"Wishing you peace, happiness, and joy!"';
+        ctx.fillStyle = '#e2f1ff';
+        ctx.font = 'italic 34px "Outfit", sans-serif';
+        
+        // Wrap text
+        const words = msg.split(' ');
+        let line = '';
+        let y = 430;
+        for (let n = 0; n < words.length; n++) {
+          const testLine = line + words[n] + ' ';
+          const metrics = ctx.measureText(testLine);
+          if (metrics.width > 900 && n > 0) {
+            ctx.fillText(line, 600, y);
+            line = words[n] + ' ';
+            y += 50;
+          } else {
+            line = testLine;
+          }
+        }
+        ctx.fillText(line, 600, y);
+
+        // Footer signature
+        ctx.fillStyle = '#f7d070';
+        ctx.font = '40px "Great Vibes", cursive';
+        const from = (cardPreviewFrom && cardPreviewFrom.textContent) || "With love";
+        ctx.fillText(from, 600, 750);
+
+        ctx.fillStyle = '#d4af37';
+        ctx.font = 'bold 22px Cinzel, serif';
+        ctx.fillText('CHRISTMAS WONDERLAND 2026', 600, 800);
+
+        // Trigger Download
+        const a = document.createElement('a');
+        a.download = 'Christmas_Greeting_Card_2026.png';
+        a.href = offCanvas.toDataURL('image/png');
+        a.click();
+        showCardToast("Card image downloaded!");
+      });
+    }
+
+    // Check URL parameters for personalized card loading
+    window.addEventListener('load', () => {
+      try {
+        const hash = window.location.hash;
+        if (hash.includes('to=')) {
+          const params = new URLSearchParams(hash.substring(1));
+          const toParam = params.get('to');
+          const fromParam = params.get('from');
+          if (toParam && cardRecipientInput) cardRecipientInput.value = decodeURIComponent(toParam);
+          if (fromParam && cardSenderInput) cardSenderInput.value = decodeURIComponent(fromParam);
+          updateCardPreview();
+        }
+      } catch (e) {}
+    });
+
+    /* ==========================================================
+       7. MEMORY WALL & PHOTO UPLOAD
+       ========================================================== */
+    const openUploadMemoryModalBtn = document.getElementById('openUploadMemoryModalBtn');
+    const uploadMemoryModal = document.getElementById('uploadMemoryModal');
+    const closeUploadModalBtn = document.getElementById('closeUploadModalBtn');
+    const memoryUploadForm = document.getElementById('memoryUploadForm');
+    const memoryFileInput = document.getElementById('memoryFileInput');
+    const filePreviewContainer = document.getElementById('filePreviewContainer');
+    const imagePreviewElement = document.getElementById('imagePreviewElement');
+    const memoryGalleryGrid = document.getElementById('memoryGalleryGrid');
+
+    let uploadedBase64 = "";
+
+    if (openUploadMemoryModalBtn && uploadMemoryModal) {
+      openUploadMemoryModalBtn.addEventListener('click', () => {
+        uploadMemoryModal.classList.remove('opacity-0', 'pointer-events-none');
+      });
+    }
+
+    if (closeUploadModalBtn && uploadMemoryModal) {
+      closeUploadModalBtn.addEventListener('click', () => {
+        uploadMemoryModal.classList.add('opacity-0', 'pointer-events-none');
+      });
+    }
+
+    if (memoryFileInput) {
+      memoryFileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (re) => {
+            uploadedBase64 = re.target.result;
+            if (imagePreviewElement) imagePreviewElement.src = uploadedBase64;
+            if (filePreviewContainer) filePreviewContainer.classList.remove('hidden');
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
+    if (memoryUploadForm) {
+      memoryUploadForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const title = document.getElementById('memoryTitleInput').value.trim();
+        const date = document.getElementById('memoryDateInput').value.trim() || 'December 2026';
+        const story = document.getElementById('memoryStoryInput').value.trim() || 'A cherished Christmas memory.';
+
+        const card = document.createElement('div');
+        card.className = "memory-card glass-panel rounded-3xl p-4 border border-festive-gold/30 shadow-xl glass-card-hover group cursor-pointer";
+        card.innerHTML = '<div class="w-full aspect-[4/3] rounded-2xl overflow-hidden mb-3 bg-midnight-950 relative"><img src="' + (uploadedBase64 || 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'300\' fill=\'%230c1a38\'><text x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%23d4af37\' font-size=\'48\'>🎄</text></svg>') + '" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="' + title + '"><div class="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-midnight-900/80 text-[10px] text-festive-gold font-mono">' + date + '</div></div><h4 class="font-cinzel text-base font-bold text-white group-hover:text-festive-gold transition-colors">' + title + '</h4><p class="font-outfit text-xs text-slate-300 mt-1 line-clamp-2">' + story + '</p>';
+
+        if (memoryGalleryGrid) {
+          memoryGalleryGrid.prepend(card);
+        }
+
+        if (typeof confetti === 'function') {
+          confetti({ particleCount: 60, spread: 60, origin: { y: 0.7 } });
+        }
+
+        // Close modal
+        if (uploadMemoryModal) uploadMemoryModal.classList.add('opacity-0', 'pointer-events-none');
+        memoryUploadForm.reset();
+        if (filePreviewContainer) filePreviewContainer.classList.add('hidden');
+        uploadedBase64 = "";
+      });
+    }
+
+    // Lightbox for Memory Cards
+    const memoryLightboxModal = document.getElementById('memoryLightboxModal');
+    const closeLightboxBtn = document.getElementById('closeLightboxBtn');
+    const lightboxVisualContainer = document.getElementById('lightboxVisualContainer');
+    const lightboxTitle = document.getElementById('lightboxTitle');
+    const lightboxDate = document.getElementById('lightboxDate');
+    const lightboxDescription = document.getElementById('lightboxDescription');
+
+    if (memoryGalleryGrid) {
+      memoryGalleryGrid.addEventListener('click', (e) => {
+        const card = e.target.closest('.memory-card');
+        if (!card) return;
+
+        const title = card.querySelector('h4') ? card.querySelector('h4').textContent : '';
+        const desc = card.querySelector('p') ? card.querySelector('p').textContent : '';
+        const date = card.querySelector('.font-mono') ? card.querySelector('.font-mono').textContent : '';
+        const mediaContainer = card.querySelector('.aspect-\\[4\\/3\\]');
+
+        if (lightboxTitle) lightboxTitle.textContent = title;
+        if (lightboxDescription) lightboxDescription.textContent = desc;
+        if (lightboxDate) lightboxDate.textContent = date;
+
+        if (lightboxVisualContainer && mediaContainer) {
+          lightboxVisualContainer.innerHTML = mediaContainer.innerHTML;
+        }
+
+        if (memoryLightboxModal) {
+          memoryLightboxModal.classList.remove('opacity-0', 'pointer-events-none');
+        }
+      });
+    }
+
+    if (closeLightboxBtn && memoryLightboxModal) {
+      closeLightboxBtn.addEventListener('click', () => {
+        memoryLightboxModal.classList.add('opacity-0', 'pointer-events-none');
+      });
+    }
+
+    /* ==========================================================
+       8. SECRET CHRISTMAS SURPRISE & SKY LANTERN WISH
+       ========================================================== */
+    const surpriseModal = document.getElementById('surpriseModal');
+    const closeSurpriseModalBtn = document.getElementById('closeSurpriseModalBtn');
+    const navSurpriseBtn = document.getElementById('navSurpriseBtn');
+    const mobileSurpriseBtn = document.getElementById('mobileSurpriseBtn');
+    const footerSurpriseBtn = document.getElementById('footerSurpriseBtn');
+    const releaseSkyWishBtn = document.getElementById('releaseSkyWishBtn');
+    const skyWishInput = document.getElementById('skyWishInput');
+    const wishConfirmationText = document.getElementById('wishConfirmationText');
+
+    function openSurpriseModal() {
+      if (!surpriseModal) return;
+      surpriseModal.classList.remove('opacity-0', 'pointer-events-none');
+      audioEngine.playChimeFlourish();
+
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 120,
+          spread: 90,
+          origin: { y: 0.5 },
+          colors: ['#ffe699', '#f7d070', '#d4af37', '#ffffff']
+        });
+      }
+    }
+
+    [navSurpriseBtn, mobileSurpriseBtn, footerSurpriseBtn].forEach(btn => {
+      if (btn) btn.addEventListener('click', openSurpriseModal);
+    });
+
+    if (closeSurpriseModalBtn && surpriseModal) {
+      closeSurpriseModalBtn.addEventListener('click', () => {
+        surpriseModal.classList.add('opacity-0', 'pointer-events-none');
+      });
+    }
+
+    if (releaseSkyWishBtn) {
+      releaseSkyWishBtn.addEventListener('click', () => {
+        const wish = skyWishInput ? skyWishInput.value.trim() : "";
+        if (!wish) return;
+
+        audioEngine.playChimeFlourish();
+        if (typeof confetti === 'function') {
+          confetti({ particleCount: 50, spread: 60, origin: { y: 0.4 } });
+        }
+
+        if (wishConfirmationText) wishConfirmationText.classList.remove('hidden');
+        if (skyWishInput) skyWishInput.value = "";
+
+        setTimeout(() => {
+          if (wishConfirmationText) wishConfirmationText.classList.add('hidden');
+        }, 5000);
+      });
+    }
+
+    /* ==========================================================
+       9. DESKTOP INTERACTIVE CURSOR & SPARKLE TRAILS
+       ========================================================== */
+    const magicCursor = document.getElementById('magicCursor');
+    const magicCursorDot = document.getElementById('magicCursorDot');
+
+    if (window.innerWidth > 768 && magicCursor && magicCursorDot) {
+      window.addEventListener('mousemove', (e) => {
+        magicCursor.style.left = e.clientX + 'px';
+        magicCursor.style.top = e.clientY + 'px';
+        magicCursorDot.style.left = e.clientX + 'px';
+        magicCursorDot.style.top = e.clientY + 'px';
+
+        // Spawn occasional sparkle particle
+        if (Math.random() < 0.25) {
+          const p = document.createElement('div');
+          p.className = 'sparkle-particle';
+          p.style.left = (e.clientX + (Math.random() * 16 - 8)) + 'px';
+          p.style.top = (e.clientY + (Math.random() * 16 - 8)) + 'px';
+          p.style.setProperty('--tx', (Math.random() * 20 - 10) + 'px');
+          p.style.setProperty('--ty', (Math.random() * 25 + 10) + 'px');
+          document.body.appendChild(p);
+          setTimeout(() => p.remove(), 800);
+        }
+      });
+    }
+
+    /* ==========================================================
+       10. CORE NAVIGATION, MUSIC & ENTER EXPERIENCE CONTROLS
+       ========================================================== */
+    const enterExperienceBtn = document.getElementById('enterExperienceBtn');
+    if (enterExperienceBtn) {
+      enterExperienceBtn.addEventListener('click', () => {
+        // Start Christmas Carol Music
+        audioEngine.play();
+        audioEngine.playChimeFlourish();
+
+        // Smooth scroll down to 3D world
+        const target = document.getElementById('world3d');
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    }
+
+    // Cathedral blessing chime
+    const chimeBlessingBtn = document.getElementById('chimeBlessingBtn');
+    if (chimeBlessingBtn) {
+      chimeBlessingBtn.addEventListener('click', () => {
+        audioEngine.playChimeFlourish();
+        if (typeof confetti === 'function') {
+          confetti({ particleCount: 30, spread: 50, origin: { y: 0.5 } });
+        }
+      });
+    }
+
+    // Nav Music Button
+    const navMusicBtn = document.getElementById('navMusicBtn');
+    if (navMusicBtn) {
+      navMusicBtn.addEventListener('click', () => {
+        audioEngine.togglePlay();
+      });
+    }
+
+    // Main Music Player Controls
+    const mainPlayPauseBtn = document.getElementById('mainPlayPauseBtn');
+    if (mainPlayPauseBtn) {
+      mainPlayPauseBtn.addEventListener('click', () => audioEngine.togglePlay());
+    }
+
+    const prevTrackBtn = document.getElementById('prevTrackBtn');
+    if (prevTrackBtn) {
+      prevTrackBtn.addEventListener('click', () => audioEngine.prevTrack());
+    }
+
+    const nextTrackBtn = document.getElementById('nextTrackBtn');
+    if (nextTrackBtn) {
+      nextTrackBtn.addEventListener('click', () => audioEngine.nextTrack());
+    }
+
+    const volumeSlider = document.getElementById('volumeSlider');
+    if (volumeSlider) {
+      volumeSlider.addEventListener('input', (e) => audioEngine.setVolume(e.target.value));
+    }
+
+    const muteToggleBtn = document.getElementById('muteToggleBtn');
+    if (muteToggleBtn) {
+      muteToggleBtn.addEventListener('click', () => audioEngine.toggleMute());
+    }
+
+    // Song Pills
+    document.querySelectorAll('.song-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        const songIdx = parseInt(pill.getAttribute('data-song'), 10);
+        audioEngine.selectSong(songIdx);
+      });
+    });
+
+    // Fullscreen Toggle
+    const fullscreenToggleBtn = document.getElementById('fullscreenToggleBtn');
+    if (fullscreenToggleBtn) {
+      fullscreenToggleBtn.addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+          document.exitFullscreen().catch(() => {});
+        }
+      });
+    }
+
+    // Mobile Drawer Menu
+    const mobileMenuToggleBtn = document.getElementById('mobileMenuToggleBtn');
+    const mobileDrawer = document.getElementById('mobileDrawer');
+    if (mobileMenuToggleBtn && mobileDrawer) {
+      mobileMenuToggleBtn.addEventListener('click', () => {
+        mobileDrawer.classList.toggle('hidden');
+      });
+      document.querySelectorAll('.mobile-nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileDrawer.classList.add('hidden');
+        });
+      });
+    }
+
+    // Back to Top Button
+    const backToTopBtn = document.getElementById('backToTopBtn');
+    if (backToTopBtn) {
+      backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    // Floating Nav Header blur on scroll
+    const mainHeader = document.getElementById('mainHeader');
+    window.addEventListener('scroll', () => {
+      if (mainHeader) {
+        if (window.scrollY > 50) {
+          mainHeader.classList.add('py-2');
+          mainHeader.classList.remove('py-3');
+        } else {
+          mainHeader.classList.add('py-3');
+          mainHeader.classList.remove('py-2');
+        }
+      }
+    });
+
+  </script>
+</body>
+</html>
