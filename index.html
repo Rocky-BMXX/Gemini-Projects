@@ -2575,10 +2575,20 @@
       aurora: "bg-gradient-to-br from-[#061e38] via-[#0f2c4c] to-[#1a1440] border-cyan-400",
       gold: "bg-gradient-to-br from-[#2b2006] via-[#1a1403] to-[#0d0901] border-amber-300"
     };
+    const cardExportThemes = {
+      emerald: { colors: ['#0c3d25', '#082a19', '#04160d'], border: '#d4af37', innerBorder: '#f7d070' },
+      ruby: { colors: ['#590d18', '#38040e', '#1f0208'], border: '#d9253c', innerBorder: '#ff4d6d' },
+      aurora: { colors: ['#061e38', '#0f2c4c', '#1a1440'], border: '#22d3ee', innerBorder: '#67e8f9' },
+      gold: { colors: ['#2b2006', '#1a1403', '#0d0901'], border: '#fcd34d', innerBorder: '#fde68a' }
+    };
+    let selectedCardStyle = 'emerald';
 
     document.querySelectorAll('.style-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const style = btn.getAttribute('data-style');
+        if (!styleThemes[style]) return;
+
+        selectedCardStyle = style;
         document.querySelectorAll('.style-btn').forEach(b => {
           b.classList.remove('border-2', 'border-festive-gold', 'text-festive-brightGold');
           b.classList.add('border', 'border-slate-700', 'text-slate-300');
@@ -2670,19 +2680,20 @@
         const ctx = offCanvas.getContext('2d');
 
         // Background Gradient
+        const theme = cardExportThemes[selectedCardStyle] || cardExportThemes.emerald;
         const grad = ctx.createLinearGradient(0, 0, 1200, 900);
-        grad.addColorStop(0, '#0c3d25');
-        grad.addColorStop(0.5, '#082a19');
-        grad.addColorStop(1, '#04160d');
+        grad.addColorStop(0, theme.colors[0]);
+        grad.addColorStop(0.5, theme.colors[1]);
+        grad.addColorStop(1, theme.colors[2]);
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, 1200, 900);
 
-        // Gold border
-        ctx.strokeStyle = '#d4af37';
+        // Theme border
+        ctx.strokeStyle = theme.border;
         ctx.lineWidth = 12;
         ctx.strokeRect(30, 30, 1140, 840);
 
-        ctx.strokeStyle = '#f7d070';
+        ctx.strokeStyle = theme.innerBorder;
         ctx.lineWidth = 2;
         ctx.strokeRect(50, 50, 1100, 800);
 
